@@ -23,21 +23,26 @@ A
 
 **Integrantes do grupo:**
 
-- Larissa
+- Larissa¹
 
 Email: @gmail.com
 
-- Leonardo
+- Leonardo¹
 
 Email: @gmail.com
 
-- Pedro Gregori
+- Pedro Gregori¹
 
 Email: @gmail.com
 
-- Robert Brandão Pereira Conceição, (Graduando Sistemas para internet)
+- Robert Brandão Pereira Conceição¹
 
 Email: robertbrandao131@gmail.com
+
+**Graduação:**
+
+1. Graduando Sistemas para internet
+
 
 
 المشروع النهائي
