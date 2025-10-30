@@ -1,11 +1,11 @@
 # Projeto ExpressAR
 
 
-**Objetivo do aplicativo:**
+**OBJETIVO DO APLICATIVO:**
 
 O objetivo deste trabalho é desenvolver uma ferramenta que visa facilitar a comunicação, reduzir o isolamento e promover autonomia escolar, além de apoiar professores com uma tecnologia pedagógica inclusiva, por meio de um aplicativo para crianças com TEA nível 2, utilizando Comunicação Alternativa e Aumentativa (CAA) com imagens, sons e recursos interativos.
 
-**Resumo:**
+**RESUMO:**
 
 Crianças não verbais com Transtorno do Espectro Autista (TEA), nível 2, enfrentam desafios de comunicação e interação social no ambiente escolar, sendo a dificuldade em manifestar desejos e necessidades um fator que impacta sua inclusão nesse ambiente. O objetivo geral deste projeto é desenvolver e validar o aplicativo ExpressAr, uma tecnologia assistiva baseada em Comunicação Alternativa e Aumentativa (CAA), para facilitar a comunicação, reduzir o isolamento e promover a autonomia dessas crianças no contexto escolar, apoiando também os educadores.
 
@@ -15,7 +15,7 @@ O DSR incluirá a revisão bibliográfica sobre CAA e TEA, e o desenvolvimento i
 
 Espera-se que o ExpressAr resulte em um protótipo funcional e gere conhecimento científico sobre a aplicação de CAA digital em ambientes inclusivos. Os resultados previstos incluem o potencial para o aumento da participação ativa da criança e a melhora na capacidade de manifestar desejos de forma autônoma, contribuindo para um processo de aprendizagem inclusivo.
 
-**Abstract:**
+**ABSTRACT:**
 
 Nonverbal children with Autism Spectrum Disorder (ASD), level 2, face communication and social interaction challenges in the school environment, with difficulty expressing desires and needs being a key factor that impacts their inclusion in this setting. The main goal of this project is to develop and validate the ExpressAr application, an assistive technology based on Augmentative and Alternative Communication (AAC), to facilitate communication, reduce isolation, and promote autonomy for these children in the school context, while also supporting educators.
 
@@ -25,15 +25,15 @@ The DSR process will include a literature review on AAC and ASD, as well as the 
 
 It is expected that ExpressAr will result in a functional prototype and generate scientific knowledge about the use of digital AAC in inclusive environments. The anticipated outcomes include an increase in the child’s active participation and an improvement in their ability to express desires autonomously, contributing to a more inclusive learning process.
 
-**Link do Trello:**
+**LINK DO TRELLO:**
 
 https://trello.com/b/tPHJjMcu/kanban-expressar
 
-**Link do protótipo:**
+**LINK DO PROTÓTIPO:**
 
 A
 
-**Integrantes do grupo:**
+**INTEGRANTES DO GRUPO:**
 
 - Larissa¹
 
@@ -51,7 +51,7 @@ Email: @gmail.com
 
 Email: robertbrandao131@gmail.com
 
-**Graduação:**
+**GRADUAÇÃO:**
 
 1. Graduando Sistemas para internet
 
