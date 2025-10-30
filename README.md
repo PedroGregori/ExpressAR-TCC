@@ -35,17 +35,17 @@ A
 
 **INTEGRANTES DO GRUPO:**
 
-- Larissa¹
+- Larissa Almeida de Sousa¹
 
-Email: @gmail.com
+Email: larissaalmeida0414@gmail.com
 
-- Leonardo¹
+- Leonardo Jesus Macena¹
 
-Email: @gmail.com
+Email: leonardomacena721@gmail.com
 
-- Pedro Gregori¹
+- Pedro Gregori Lima Ferreira¹
 
-Email: @gmail.com
+Email: gregoripedrolf@gmail.com
 
 - Robert Brandão Pereira Conceição¹
 
