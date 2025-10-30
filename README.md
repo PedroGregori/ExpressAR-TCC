@@ -7,11 +7,23 @@ O objetivo deste trabalho é desenvolver uma ferramenta que visa facilitar a com
 
 **Resumo:**
 
-A
+Crianças não verbais com Transtorno do Espectro Autista (TEA), nível 2, enfrentam desafios de comunicação e interação social no ambiente escolar, sendo a dificuldade em manifestar desejos e necessidades um fator que impacta sua inclusão nesse ambiente. O objetivo geral deste projeto é desenvolver e validar o aplicativo ExpressAr, uma tecnologia assistiva baseada em Comunicação Alternativa e Aumentativa (CAA), para facilitar a comunicação, reduzir o isolamento e promover a autonomia dessas crianças no contexto escolar, apoiando também os educadores.
+
+Para isso, o projeto visa, de forma específica, desenvolver um sistema de CAA com recursos visuais e sonoros para expressão de vontades e sentimentos, reduzir o isolamento social e estimular a autonomia na rotina escolar. O trabalho seguirá a abordagem de Design Science Research (DSR), metodologia de pesquisa focada na criação de soluções para problemas do mundo real por meio da criação e validação de artefatos práticos com rigor científico.
+
+O DSR incluirá a revisão bibliográfica sobre CAA e TEA, e o desenvolvimento iterativo do ExpressAr, adotando metodologias ágeis (Scrum/Kanban) para o planejamento, levantamento de requisitos, design, prototipação e codificação. A validação do artefato será conduzida através de testes de integração — testes unitários e funcionais executados pelos próprios programadores — garantindo a eficácia técnica e o funcionamento dos módulos do aplicativo antes da documentação final.
+
+Espera-se que o ExpressAr resulte em um protótipo funcional e gere conhecimento científico sobre a aplicação de CAA digital em ambientes inclusivos. Os resultados previstos incluem o potencial para o aumento da participação ativa da criança e a melhora na capacidade de manifestar desejos de forma autônoma, contribuindo para um processo de aprendizagem inclusivo.
 
 **Abstract:**
 
-The
+Nonverbal children with Autism Spectrum Disorder (ASD), level 2, face communication and social interaction challenges in the school environment, with difficulty expressing desires and needs being a key factor that impacts their inclusion in this setting. The main goal of this project is to develop and validate the ExpressAr application, an assistive technology based on Augmentative and Alternative Communication (AAC), to facilitate communication, reduce isolation, and promote autonomy for these children in the school context, while also supporting educators.
+
+Specifically, the project aims to develop an AAC system with visual and auditory resources to help express wants and feelings, reduce social isolation, and stimulate autonomy in the school routine. The work will follow the Design Science Research (DSR) approach, a research methodology focused on creating solutions to real-world problems through the design and validation of practical artifacts with scientific rigor.
+
+The DSR process will include a literature review on AAC and ASD, as well as the iterative development of ExpressAr, adopting agile methodologies (Scrum/Kanban) for planning, requirements gathering, design, prototyping, and coding. The artifact validation will be conducted through integration testing — including unit and functional tests performed by the programmers themselves — ensuring the technical effectiveness and functionality of the app’s modules before the final documentation.
+
+It is expected that ExpressAr will result in a functional prototype and generate scientific knowledge about the use of digital AAC in inclusive environments. The anticipated outcomes include an increase in the child’s active participation and an improvement in their ability to express desires autonomously, contributing to a more inclusive learning process.
 
 **Link do Trello:**
 
@@ -43,6 +55,3 @@ Email: robertbrandao131@gmail.com
 
 1. Graduando Sistemas para internet
 
-
-
-المشروع النهائي
