@@ -29,9 +29,17 @@ It is expected that ExpressAr will result in a functional prototype and generate
 
 https://trello.com/b/tPHJjMcu/kanban-expressar
 
-**LINK DO PROTÓTIPO:**
+**IMAGENS DO PROTÓTIPO:**
 
-A
+<img width="497" height="1080" alt="1 - Tela inicial" src="https://github.com/user-attachments/assets/249733cc-41ad-4295-9b88-913be379071e" />
+
+<img width="497" height="1080" alt="2 - Login aluno " src="https://github.com/user-attachments/assets/1e93a69e-40d7-4ad2-b3d2-c6c9fc4b5061" />
+
+<img width="498" height="1080" alt="3 - Categorias gerais" src="https://github.com/user-attachments/assets/6a4b3e0d-04bb-4640-8296-176d930bd94c" />
+
+<img width="496" height="1080" alt="4 - Categoria comidas" src="https://github.com/user-attachments/assets/464c66f1-1407-459e-b8fa-67ff8219ab32" />
+
+<img width="497" height="1076" alt="5 - Categoria frutas" src="https://github.com/user-attachments/assets/b5e0d132-a62b-45e9-bc0a-796a0f5ca3cd" />
 
 **INTEGRANTES DO GRUPO:**
 
