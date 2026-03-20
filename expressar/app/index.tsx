@@ -4,12 +4,12 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image,
   StatusBar,
-  Dimensions,
 } from 'react-native'
-
-const { width, height } = Dimensions.get('window')
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'
 
 export default function HomeScreen() {
   const router = useRouter()
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF8E7',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: wp('8%'),
   },
 
   // --- Decoração de fundo ---
@@ -84,47 +84,47 @@ const styles = StyleSheet.create({
     opacity: 0.25,
   },
   bubble1: {
-    width: 180,
-    height: 180,
+    width: wp('45%'),
+    height: wp('45%'),
     backgroundColor: '#F5A623',
-    top: -40,
-    left: -60,
+    top: -hp('3%'),
+    left: -wp('10%'),
   },
   bubble2: {
-    width: 120,
-    height: 120,
+    width: wp('30%'),
+    height: wp('30%'),
     backgroundColor: '#5BC8E8',
-    top: 80,
-    right: -30,
+    top: hp('8%'),
+    right: -wp('5%'),
   },
   bubble3: {
-    width: 100,
-    height: 100,
+    width: wp('25%'),
+    height: wp('25%'),
     backgroundColor: '#7ED957',
-    bottom: 120,
-    left: -20,
+    bottom: hp('14%'),
+    left: -wp('3%'),
   },
   bubble4: {
-    width: 150,
-    height: 150,
+    width: wp('38%'),
+    height: wp('38%'),
     backgroundColor: '#F5A623',
-    bottom: -40,
-    right: -50,
+    bottom: -hp('3%'),
+    right: -wp('8%'),
   },
 
   // --- Logo ---
   logoArea: {
     alignItems: 'center',
-    marginBottom: 56,
+    marginBottom: hp('7%'),
   },
   logoPlaceholder: {
-    width: 110,
-    height: 110,
-    borderRadius: 28,
+    width: wp('28%'),
+    height: wp('28%'),
+    borderRadius: wp('6%'),
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: hp('2%'),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -132,18 +132,18 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   logoPlaceholderText: {
-    fontSize: 52,
+    fontSize: wp('13%'),
   },
   appName: {
-    fontSize: 38,
+    fontSize: wp('10%'),
     fontWeight: '800',
     color: '#2D2D2D',
     letterSpacing: 0.5,
   },
   slogan: {
-    fontSize: 15,
+    fontSize: wp('4%'),
     color: '#888888',
-    marginTop: 4,
+    marginTop: hp('0.5%'),
     fontStyle: 'italic',
     letterSpacing: 0.3,
   },
@@ -151,14 +151,14 @@ const styles = StyleSheet.create({
   // --- Botões ---
   buttonsArea: {
     width: '100%',
-    gap: 16,
+    gap: hp('2%'),
   },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 18,
-    paddingHorizontal: 28,
-    borderRadius: 20,
+    paddingVertical: hp('2.2%'),
+    paddingHorizontal: wp('7%'),
+    borderRadius: wp('5%'),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -166,25 +166,25 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonAluno: {
-    backgroundColor: '#5BC8E8', // azul claro — cor do fluxo do aluno
+    backgroundColor: '#5BC8E8',
   },
   buttonProfessor: {
-    backgroundColor: '#F5A623', // laranja — cor do fluxo do professor
+    backgroundColor: '#F5A623',
   },
   buttonIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 14,
+    width: wp('13%'),
+    height: wp('13%'),
+    borderRadius: wp('3.5%'),
     backgroundColor: 'rgba(255,255,255,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 18,
+    marginRight: wp('4%'),
   },
   buttonIconText: {
-    fontSize: 28,
+    fontSize: wp('7%'),
   },
   buttonText: {
-    fontSize: 22,
+    fontSize: wp('6%'),
     fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: 0.3,
