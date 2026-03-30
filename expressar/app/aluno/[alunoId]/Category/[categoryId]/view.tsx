@@ -1,3 +1,4 @@
+// CategoryDetailView.tsx
 import { useUserLogged } from '@/hooks/useUserLogged'
 import {
   View,
@@ -15,6 +16,7 @@ import {
 } from 'react-native-responsive-screen'
 
 import useCategoryDetail from './model'
+import { useTextToSpeech } from '@/hooks/useAudio'
 
 export default function CategoryDetailView({
   pictogramas,
@@ -22,8 +24,11 @@ export default function CategoryDetailView({
   erro,
 }: ReturnType<typeof useCategoryDetail>) {
   const { nomeAluno } = useUserLogged()
+  const { falar } = useTextToSpeech() // hook TTS
 
-  function handleSair() {}
+  function handleSair() {
+    // sua função de logout continua aqui
+  }
 
   return (
     <View style={styles.container}>
@@ -52,7 +57,11 @@ export default function CategoryDetailView({
         {erro && <Text>{erro}</Text>}
 
         {pictogramas.map((p) => (
-          <TouchableOpacity key={p.id} style={styles.card}>
+          <TouchableOpacity
+            key={p.id}
+            style={styles.card}
+            onPress={() => falar(p.nome)} // chama TTS via hook
+          >
             <Image source={{ uri: p.imagemUrl }} style={styles.image} />
             <Text style={styles.nome}>{p.nome}</Text>
           </TouchableOpacity>
