@@ -1,0 +1,188 @@
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native'
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'
+import useClassCodeModel from './model'
+
+
+export default function ClassCodeView({
+    codigo,
+    erro, 
+    carregando,
+    handleTrocarCodigo,
+    handleConfirmar,
+}: ReturnType<typeof useClassCodeModel>) {
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF8E7" />
+
+      {/* Decoração */}
+      <View style={[styles.bubble, styles.bubble1]} />
+      <View style={[styles.bubble, styles.bubble2]} />
+
+      {/* Conteúdo */}
+      <View style={styles.card}>
+
+        <Text style={styles.emoji}>🔑</Text>
+        <Text style={styles.titulo}>Olá! Qual é o seu código?</Text>
+        <Text style={styles.subtitulo}>
+          Peça para o seu professor digitar o código aqui.
+        </Text>
+
+        <TextInput
+          style={[styles.input, erro ? styles.inputErro : null]}
+          placeholder="Ex: ALU-0001"
+          placeholderTextColor="#BBBBBB"
+          value={codigo}
+          onChangeText= {handleTrocarCodigo}
+          autoCapitalize="characters"
+          autoCorrect={false}
+          maxLength={8}
+        />
+
+        {/* Mensagem de erro */}
+        {erro ? (
+          <Text style={styles.textoErro}>⚠ {erro}</Text>
+        ) : null}
+
+        <TouchableOpacity
+          style={[styles.botao, carregando && styles.botaoDesabilitado]}
+          onPress={handleConfirmar}
+          activeOpacity={0.85}
+          disabled={carregando}
+        >
+          {carregando ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.botaoTexto}>Confirmar</Text>
+          )}
+        </TouchableOpacity>
+
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF8E7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: wp('8%'),
+  },
+
+  // --- Decoração ---
+  bubble: {
+    position: 'absolute',
+    borderRadius: 999,
+    opacity: 0.2,
+  },
+  bubble1: {
+    width: wp('50%'),
+    height: wp('50%'),
+    backgroundColor: '#5BC8E8',
+    top: -hp('4%'),
+    right: -wp('15%'),
+  },
+  bubble2: {
+    width: wp('40%'),
+    height: wp('40%'),
+    backgroundColor: '#F5A623',
+    bottom: -hp('3%'),
+    left: -wp('10%'),
+  },
+
+  // --- Card ---
+  card: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: wp('6%'),
+    paddingHorizontal: wp('7%'),
+    paddingVertical: hp('4%'),
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 6,
+  },
+  emoji: {
+    fontSize: wp('14%'),
+    marginBottom: hp('1.5%'),
+  },
+  titulo: {
+    fontSize: wp('6%'),
+    fontWeight: '800',
+    color: '#2D2D2D',
+    textAlign: 'center',
+    marginBottom: hp('1%'),
+  },
+  subtitulo: {
+    fontSize: wp('3.8%'),
+    color: '#888888',
+    textAlign: 'center',
+    marginBottom: hp('3%'),
+    lineHeight: wp('5.5%'),
+  },
+
+  // --- Input ---
+  input: {
+    width: '100%',
+    height: hp('7%'),
+    borderWidth: 2,
+    borderColor: '#E0E0E0',
+    borderRadius: wp('3.5%'),
+    paddingHorizontal: wp('4%'),
+    fontSize: wp('5%'),
+    fontWeight: '700',
+    color: '#2D2D2D',
+    textAlign: 'center',
+    letterSpacing: 2,
+    backgroundColor: '#FAFAFA',
+    marginBottom: hp('1%'),
+  },
+  inputErro: {
+    borderColor: '#FF5252',
+  },
+  textoErro: {
+    fontSize: wp('3.5%'),
+    color: '#FF5252',
+    marginBottom: hp('1.5%'),
+    alignSelf: 'flex-start',
+  },
+
+  // --- Botão ---
+  botao: {
+    width: '100%',
+    height: hp('7%'),
+    backgroundColor: '#5BC8E8',
+    borderRadius: wp('3.5%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: hp('1.5%'),
+    shadowColor: '#5BC8E8',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  botaoDesabilitado: {
+    opacity: 0.7,
+  },
+  botaoTexto: {
+    fontSize: wp('5%'),
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+})
