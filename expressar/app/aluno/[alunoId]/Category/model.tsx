@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import {Alert} from 'react-native'
+import { Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { buscarPictogramas } from '@/services/arasaac/arasaacService'
-import { usePictogramas } from '@/hooks/usePictogramas'
 
 // ============================================================
 // Categorias fixas do MVP
@@ -16,25 +14,26 @@ const CATEGORIAS = [
   { id: '5', nome: 'Comunicação',  emoji: '💬', cor: '#BA68C8' },
 ]
 
+const CATEGORIAS_COM_SUB = ['Comidas', 'Escola']
+
 export default function useCategoryModel() {
   const router = useRouter()
   const [nomeAluno, setNomeAluno] = useState('')
   const [alunoId, setAlunoId] = useState('')
 
-  // Verifica AsyncStorage — redireciona para código se não tiver aluno salvo
   useEffect(() => {
     async function verificarAluno() {
-      const id = await AsyncStorage.getItem('aluno_id')
-      const nome = await AsyncStorage.getItem('aluno_nome')
+      const alunoStorage = await AsyncStorage.getItem('aluno')
 
-      if (!id || !nome) {
-        // Sem código salvo — pede para digitar
+      if (!alunoStorage) {
         router.replace('/aluno')
         return
       }
 
-      setAlunoId(id)
-      setNomeAluno(nome)
+      const aluno = JSON.parse(alunoStorage)
+
+      setAlunoId(aluno.id)
+      setNomeAluno(aluno.nome)
     }
 
     verificarAluno()
@@ -50,33 +49,39 @@ export default function useCategoryModel() {
           text: 'Sair',
           style: 'destructive',
           onPress: async () => {
-            await AsyncStorage.removeItem('aluno_id')
-            await AsyncStorage.removeItem('aluno_nome')
-            await AsyncStorage.removeItem('aluno_codigo')
-            router.replace('/')
+            await AsyncStorage.removeItem('aluno')
+            router.replace('/HomeScreen')
           },
         },
       ]
     )
   }
 
-
   async function handleCategoria(categoriaId: string, categoriaNome: string) {
-  try {
-    // depois navega
-    router.push({
-      pathname: `/aluno/${alunoId}/Category/${categoriaId}`,
-      params: { nome: categoriaNome }
-    })
+    const temSub = CATEGORIAS_COM_SUB.includes(categoriaNome)
 
-  } catch (erro) {
-    console.log('ERRO API:', erro)
+    if (temSub) {
+      router.push({
+        pathname: '/aluno/[id]/Category/SubCategory',
+        params: {
+          id: alunoId,
+          nome: categoriaNome
+        }
+      })
+    } else {
+      router.push({
+        pathname: '/aluno/[id]/Category/CategoryDetail',
+        params: {
+          id: alunoId,
+          nome: categoriaNome
+        }
+      })
+    }
   }
-}
 
   return {
     nomeAluno,
-    categorias : CATEGORIAS,
+    categorias: CATEGORIAS,
     handleSair,
     handleCategoria,
   }

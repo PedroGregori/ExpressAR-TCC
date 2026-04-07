@@ -7,11 +7,11 @@ export default function useHomeScreenModel() {
 
   function goToAluno() {
     if (alunoId) {
-      router.replace(`/aluno/${alunoId}`)
+      router.replace(`/aluno/${alunoId}/Category`)
       return
     }
     
-    router.push('/aluno')
+    router.push('/aluno/ClassCode')
   }
 
   function goToProfessor() {

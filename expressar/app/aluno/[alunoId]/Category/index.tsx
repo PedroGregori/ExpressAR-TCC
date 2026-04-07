@@ -1,5 +1,5 @@
-import useCategoryModel from "./Category/model";
-import CategoryView from "./Category/view";
+import useCategoryModel from "./model";
+import CategoryView from "./view";
 
 export default function CategoryScreen() {
   const CategoryModel = useCategoryModel();

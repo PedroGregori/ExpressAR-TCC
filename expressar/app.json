@@ -28,8 +28,15 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-web-browser"
     ],
-    "scheme": "expressar"
+    "scheme": "expressar",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "60a59257-a9c3-44ef-8096-6a83eec00839"
+      }
+    }
   }
 }

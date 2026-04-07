@@ -2,31 +2,28 @@ import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export function useUserLogged() {
-  const [nomeAluno, setNomeAluno] = useState('')
-  const [alunoId, setAlunoId] = useState('')
+  const [aluno, setAluno] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function carregar() {
-      try {
-        const nome = await AsyncStorage.getItem('aluno_nome')
-        const id = await AsyncStorage.getItem('aluno_id')
+    async function load() {
+      const alunoStorage = await AsyncStorage.getItem('aluno')
 
-        if (nome) setNomeAluno(nome)
-        if (id) setAlunoId(id)
-      } catch (e) {
-        console.error('Erro ao carregar dados do usuário:', e)
-      } finally {
-        setLoading(false)
+      if (alunoStorage) {
+        const parsed = JSON.parse(alunoStorage)
+        setAluno(parsed)
       }
+
+      setLoading(false)
     }
 
-    carregar()
+    load()
   }, [])
 
   return {
-    nomeAluno,
-    alunoId,
+    aluno,
+    alunoId: aluno?.id,
+    nomeAluno: aluno?.nome,
     loading,
   }
 }

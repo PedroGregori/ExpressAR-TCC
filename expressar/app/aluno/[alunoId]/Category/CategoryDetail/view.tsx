@@ -1,3 +1,4 @@
+import { useUserLogged } from '@/hooks/useUserLogged'
 import {
   View,
   Text,
@@ -5,29 +6,35 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
+  Image,
 } from 'react-native'
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen'
-import useCategoriasScreen from './model'
+
+import useCategoryDetail from './model'
+import { useTextToSpeech } from '@/hooks/useAudio'
+
 import { useSentenceBuilder } from '@/hooks/useSentenceBuilder'
 import SentenceBuilder from '@/components/SentenceBuilder'
 
-export default function CategoryView({
-    nomeAluno,
-    handleSair,
-    handleCategoria,
-    categorias,
-
-}: ReturnType<typeof useCategoriasScreen>) {
+export default function CategoryDetailView({
+  pictogramas,
+  carregando,
+  erro,
+  handleVoltar,
+}: ReturnType<typeof useCategoryDetail>) {
+  const { nomeAluno } = useUserLogged()
+  const { falar } = useTextToSpeech()
+  const { adicionar } = useSentenceBuilder()
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#5BC8E8" />
 
-      {/* Header */}
+      {/* HEADER */}
       <View style={styles.header}>
         <View style={styles.headerInfo}>
           <View style={styles.avatarPlaceholder}>
@@ -38,37 +45,45 @@ export default function CategoryView({
             <Text style={styles.headerNome}>{nomeAluno}</Text>
           </View>
         </View>
-
-        {/* Botão sair */}
-        <TouchableOpacity
-          style={styles.botaoSair}
-          onPress={handleSair}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.botaoSairTexto}>⬅ Sair</Text>
-        </TouchableOpacity>
       </View>
 
-      {/* 🔥 CONSTRUTOR DE FRASE */}
+      {/* CONSTRUTOR */}
       <SentenceBuilder />
-      {/* Grid de categorias */}
-      <ScrollView
-        contentContainerStyle={styles.grid}
-        showsVerticalScrollIndicator={false}
-      >
-        {categorias.map((categoria) => (
+
+      {/* GRID */}
+      <ScrollView contentContainerStyle={styles.grid}>
+        
+        {/* 🔥 BOTÃO VOLTAR (PADRÃO IGUAL SUBCATEGORY) */}
+        <TouchableOpacity
+          style={[styles.card, { backgroundColor: '#90A4AE' }]}
+          onPress={handleVoltar}
+          activeOpacity={0.85}
+        >
+          <Text style={styles.categoriaEmoji}>⬅️</Text>
+          <Text style={styles.categoriaNome}>Voltar</Text>
+        </TouchableOpacity>
+
+        {/* ESTADOS */}
+        {carregando && <Text>Carregando...</Text>}
+        {erro && <Text>{erro}</Text>}
+
+        {/* PICTOGRAMAS */}
+        {pictogramas.map((p, index) => (
           <TouchableOpacity
-            key={categoria.id}
-            style={[styles.categoriaCard, { backgroundColor: categoria.cor }]}
-            onPress={() => handleCategoria(categoria.id, categoria.nome)}
+            key={`${p.id}-${index}`}
+            style={styles.card}
+            onPress={() => {
+              falar(p.nome, () => {
+                adicionar(p)
+              })
+            }}
             activeOpacity={0.85}
           >
-            <Text style={styles.categoriaEmoji}>{categoria.emoji}</Text>
-            <Text style={styles.categoriaNome}>{categoria.nome}</Text>
+            <Image source={{ uri: p.imagemUrl }} style={styles.image} />
+            <Text style={styles.nome}>{p.nome}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
-
     </View>
   )
 }
@@ -79,23 +94,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F9FF',
   },
 
-  // --- Header ---
   header: {
     backgroundColor: '#5BC8E8',
     paddingTop: hp('5%'),
     paddingBottom: hp('2.5%'),
     paddingHorizontal: wp('5%'),
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomLeftRadius: wp('6%'),
     borderBottomRightRadius: wp('6%'),
   },
+
   headerInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('3%'),
   },
+
   avatarPlaceholder: {
     width: wp('14%'),
     height: wp('14%'),
@@ -104,59 +119,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   avatarEmoji: {
     fontSize: wp('7%'),
   },
+
   headerBemVindo: {
     fontSize: wp('3.5%'),
-    color: 'rgba(255,255,255,0.85)',
+    color: '#fff',
   },
+
   headerNome: {
     fontSize: wp('5.5%'),
     fontWeight: '800',
-    color: '#FFFFFF',
-  },
-  botaoSair: {
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    paddingHorizontal: wp('3.5%'),
-    paddingVertical: hp('1%'),
-    borderRadius: wp('3%'),
-  },
-  botaoSairTexto: {
-    fontSize: wp('3.5%'),
-    color: '#FFFFFF',
-    fontWeight: '600',
+    color: '#fff',
   },
 
-  // --- Grid ---
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: wp('4%'),
     gap: wp('3%'),
     justifyContent: 'center',
-    paddingBottom: hp('4%'),
   },
-  categoriaCard: {
+
+  card: {
     width: wp('42%'),
     height: wp('42%'),
+    backgroundColor: '#fff',
     borderRadius: wp('5%'),
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
     elevation: 4,
   },
+
+  image: {
+    width: wp('20%'),
+    height: wp('20%'),
+    marginBottom: hp('1%'),
+    resizeMode: 'contain',
+  },
+
+  // 🔥 IGUAL AO SUBCATEGORY
   categoriaEmoji: {
     fontSize: wp('12%'),
     marginBottom: hp('1%'),
   },
+
   categoriaNome: {
     fontSize: wp('4%'),
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#fff',
+    textAlign: 'center',
+  },
+
+  // usado nos pictogramas
+  nome: {
+    fontSize: wp('4%'),
+    fontWeight: '700',
     textAlign: 'center',
   },
 })
