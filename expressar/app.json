@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "expressar",
-    "slug": "expressar",
+    "slug": "expressar-app",
+    "owner": "expressar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,7 +14,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.expressar",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +40,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "60a59257-a9c3-44ef-8096-6a83eec00839"
+        "projectId": "512cedd7-2a25-4462-a667-46a0fbfab8f8"
       }
     }
   }

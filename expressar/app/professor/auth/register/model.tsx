@@ -20,14 +20,13 @@ export default function useRegisterModel() {
 
   // 🔥 AUTO LOGIN + LISTENER GLOBAL
   useEffect(() => {
-    checkUser()
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           const user = session.user
           await salvarProfessor(user.id, user.email ?? '', user.user_metadata?.full_name ?? '')
-          router.replace('/home')
+          router.replace('/Home')
         }
       }
     )
@@ -37,10 +36,7 @@ export default function useRegisterModel() {
     }
   }, [])
 
-  async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) router.replace('/home')
-  }
+
 
   // 🔹 Handlers de input
   const handleNome = (text: string) => { setNome(text); setErro('') }
@@ -70,7 +66,7 @@ export default function useRegisterModel() {
         await salvarProfessor(user.id, email, nome, escola) // salva usando auth_id
       }
 
-      router.replace('/home')
+      router.replace('/Home')
     } catch (e: any) {
       setErro(e.message || 'Erro ao criar conta')
     } finally {
@@ -106,7 +102,7 @@ export default function useRegisterModel() {
           if (user) {
             await salvarProfessor(user.id, user.email ?? '', user.user_metadata?.full_name ?? '')
           }
-          router.replace('/home')
+          router.replace('/Home')
         }
       }
     } catch (e) {
@@ -118,23 +114,27 @@ export default function useRegisterModel() {
   }
 
   // 🔥 SALVAR PROFESSOR (sem sobrescrever id do banco)
-  async function salvarProfessor(authId: string, email: string, nome?: string, escolaParam?: string) {
+  async function salvarProfessor(
+    authId: string,
+    email: string,
+    nome?: string,
+    escolaParam?: string
+  ) {
     const { data: existing } = await supabase
       .from('professores')
       .select('*')
-      .eq('auth_id', authId)
-      .single()
+      .eq('id', authId)
+      .maybeSingle()
 
     if (existing) {
-      // Atualiza nome/email/escola se quiser
       await supabase.from('professores').update({
         nome: nome || existing.nome,
         email: email || existing.email,
-        escola: escolaParam || existing.escola,
-      }).eq('auth_id', authId)
+        escola: escolaParam ?? existing.escola, // 🔥 CORRETO
+      }).eq('id', authId)
     } else {
       await supabase.from('professores').insert({
-        auth_id: authId, // vincula ao Supabase Auth
+        id: authId,
         email,
         nome,
         escola: escolaParam || '',

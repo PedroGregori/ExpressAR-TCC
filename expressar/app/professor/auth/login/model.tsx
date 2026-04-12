@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
+import { supabase } from '@/lib/supabase'
 
 export default function useLoginModel() {
   const router = useRouter()
@@ -25,24 +26,53 @@ export default function useLoginModel() {
       return
     }
 
+    if (loading) return
+
     setLoading(true)
 
     try {
-      // 🔥 depois você conecta com Supabase aqui
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password: senha,
+      })
 
-      console.log('Login realizado:', email)
+      if (error) throw error
 
-      router.replace('/home') // 👈 ajusta depois
-    } catch (e) {
-      setErro('Erro ao fazer login')
+      const user = data.user
+
+      if (!user) {
+        setErro('Usuário não encontrado')
+        return
+      }
+
+      // 🔥 verifica se existe professor vinculado
+      const { data: professor, error: profError } = await supabase
+        .from('professores')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      if (profError || !professor) {
+        setErro('Professor não cadastrado')
+        return
+      }
+
+      // ✅ login OK
+      router.push('professor/Home')
+
+    } catch (e: any) {
+      if (e.message.includes('Invalid login credentials')) {
+        setErro('Email ou senha inválidos')
+      } else {
+        setErro('Erro ao fazer login')
+      }
     } finally {
       setLoading(false)
     }
   }
 
   function handleCriarConta() {
-    router.push('professor/auth/register') // 👈 rota futura
+    router.push('/professor/auth/register')
   }
 
   function handleEsqueciSenha() {
