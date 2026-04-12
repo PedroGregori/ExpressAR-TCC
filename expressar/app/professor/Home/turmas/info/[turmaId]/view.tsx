@@ -18,6 +18,7 @@ export default function InfoView({
   alunos,
   handleLogout,
   goAdicionarAluno,
+  goGerenciarAluno, // ✅ agora recebemos também
 }: ReturnType<typeof useInfoModel>) {
   return (
     <View style={styles.container}>
@@ -39,7 +40,6 @@ export default function InfoView({
 
       {/* CONTEÚDO */}
       <View style={styles.content}>
-        {/* Nome da turma em verde */}
         <Text style={styles.title}>
           {turmaNome ? turmaNome.toUpperCase() : "Carregando..."}
         </Text>
@@ -55,7 +55,10 @@ export default function InfoView({
             data={alunos}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.card}>
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => goGerenciarAluno(item.id)} // ✅ chama a função passando o id do aluno
+              >
                 <View style={{ flex: 1 }}>
                   <Text style={styles.cardTitle}>{item.nome}</Text>
                   <Text style={styles.cardSubtitle}>
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: wp("6%"),
     fontWeight: "bold",
-    color: "#2E7D32", // verde
+    color: "#2E7D32",
     marginBottom: hp("1%"),
   },
   subtitle: { color: "#6B8E6B", marginBottom: hp("2%") },
