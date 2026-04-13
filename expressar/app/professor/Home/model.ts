@@ -47,7 +47,7 @@ export default function useHomeScreenModel() {
   }
 
   function goCartoes() {
-    router.push('/cartoes')
+    router.push('professor/Home/cartoes')
   }
 
   function goRelatorio() {

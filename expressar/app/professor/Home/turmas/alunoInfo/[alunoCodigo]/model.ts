@@ -12,21 +12,23 @@ type Aluno = {
 
 export default function useAlunoModel() {
   const router = useRouter()
-  const { alunoId, nome } = useLocalSearchParams<{ alunoId: string; nome: string }>()
+  const { alunoCodigo, nome } = useLocalSearchParams<{ alunoCodigo: string; nome: string }>()
+
+  console.log(alunoCodigo)
 
   const [aluno, setAluno] = useState<Aluno | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (alunoId) loadData()
-  }, [alunoId])
+    if (alunoCodigo) loadData()
+  }, [alunoCodigo])
 
   async function loadData() {
     try {
       const { data } = await supabase
         .from("alunos")
         .select("id, nome, idade, sexo, codigo")
-        .eq("id", alunoId)   // ✅ agora busca pelo id
+        .eq("codigo", alunoCodigo)   // ✅ agora busca pelo id
         .single()
 
       if (data) setAluno(data as Aluno)
@@ -53,7 +55,7 @@ export default function useAlunoModel() {
   async function removerAluno() {
     if (!aluno) return
     try {
-      await supabase.from("alunos").delete().eq("id", aluno.id)
+      await supabase.from("alunos").delete().eq("codigo", aluno.codigo)
       router.back()
     } catch (e) {
       console.log("Erro ao remover aluno:", e)

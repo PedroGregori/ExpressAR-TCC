@@ -18,7 +18,7 @@ export default function InfoView({
   alunos,
   handleLogout,
   goAdicionarAluno,
-  goGerenciarAluno, // ✅ agora recebemos também
+  goGerenciarAluno,
 }: ReturnType<typeof useInfoModel>) {
   return (
     <View style={styles.container}>
@@ -53,11 +53,11 @@ export default function InfoView({
         ) : (
           <FlatList
             data={alunos}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.codigo}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => goGerenciarAluno(item.id)} // ✅ chama a função passando o id do aluno
+                onPress={() => goGerenciarAluno(item.codigo)} // ✅ passa o código
               >
                 <View style={{ flex: 1 }}>
                   <Text style={styles.cardTitle}>{item.nome}</Text>
@@ -86,7 +86,6 @@ export default function InfoView({
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#DDE6D5" },
-
   header: {
     backgroundColor: "#6CC24A",
     height: hp("18%"),
@@ -96,7 +95,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: wp("5%"),
   },
-
   avatar: {
     width: wp("14%"),
     height: wp("14%"),
@@ -106,10 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: wp("3%"),
   },
-
   welcome: { color: "#fff", fontSize: wp("3.5%") },
   name: { color: "#fff", fontSize: wp("5%"), fontWeight: "bold" },
-
   logout: {
     backgroundColor: "#8ED973",
     paddingHorizontal: wp("4%"),
@@ -117,22 +113,10 @@ const styles = StyleSheet.create({
     borderRadius: wp("3%"),
   },
   logoutText: { color: "#fff", fontWeight: "600" },
-
   content: { flex: 1, padding: wp("5%") },
-  title: {
-    fontSize: wp("6%"),
-    fontWeight: "bold",
-    color: "#2E7D32",
-    marginBottom: hp("1%"),
-  },
+  title: { fontSize: wp("6%"), fontWeight: "bold", color: "#2E7D32", marginBottom: hp("1%") },
   subtitle: { color: "#6B8E6B", marginBottom: hp("2%") },
-  emptyText: {
-    textAlign: "center",
-    marginTop: hp("2%"),
-    color: "#777",
-    fontSize: wp("4%"),
-  },
-
+  emptyText: { textAlign: "center", marginTop: hp("2%"), color: "#777", fontSize: wp("4%") },
   card: {
     backgroundColor: "#fff",
     padding: wp("4%"),
@@ -140,7 +124,6 @@ const styles = StyleSheet.create({
     marginBottom: hp("1.5%"),
     flexDirection: "row",
     alignItems: "center",
-
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -150,22 +133,13 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: wp("4%"), fontWeight: "bold" },
   cardSubtitle: { color: "#777", fontSize: wp("3%") },
   arrow: { fontSize: wp("6%"), color: "#000", marginLeft: wp("2%") },
-
-  footer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: wp("5%"),
-    backgroundColor: "#DDE6D5",
-  },
+  footer: { position: "absolute", bottom: 0, left: 0, right: 0, padding: wp("5%"), backgroundColor: "#DDE6D5" },
   addButton: {
     backgroundColor: "#8ED973",
     height: hp("6%"),
     borderRadius: wp("4%"),
     alignItems: "center",
     justifyContent: "center",
-
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,

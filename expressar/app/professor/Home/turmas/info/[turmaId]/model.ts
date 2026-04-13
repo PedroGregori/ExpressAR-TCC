@@ -31,7 +31,7 @@ export default function useInfoModel() {
 
       const { data: alunosData } = await supabase
         .from("alunos")
-        .select("id, nome, idade, sexo")
+        .select("codigo, nome, idade, sexo") // ✅ pega o código também
         .eq("turma_id", turmaId)
 
       setAlunos(alunosData || [])
@@ -42,7 +42,6 @@ export default function useInfoModel() {
     }
   }
 
-  // ✅ logout funcionando
   function handleLogout() {
     supabase.auth.signOut()
     router.replace("/")
@@ -52,8 +51,8 @@ export default function useInfoModel() {
     router.push(`/professor/Home/turmas/addAluno/${turmaId}?professor=${professor}`)
   }
 
-  function goGerenciarAluno(alunoId: string) {
-    router.push(`/professor/Home/turmas/alunoInfo/${alunoId}`)
+  function goGerenciarAluno(alunoCodigo: string) {
+    router.push(`/professor/Home/turmas/alunoInfo/${alunoCodigo}?professor=${professor}`)
   }
 
   return {
