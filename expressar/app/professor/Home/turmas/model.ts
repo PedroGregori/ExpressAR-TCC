@@ -23,13 +23,15 @@ export default function useTurmasModel() {
 
   async function loadData() {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
       if (!user) {
         router.replace("/")
         return
       }
 
-      // 🔥 busca turmas do professor
       const { data: turmasData, error } = await supabase
         .from("turmas")
         .select("id, nome, turno")
@@ -37,7 +39,6 @@ export default function useTurmasModel() {
 
       if (error) throw error
 
-      // 🔥 para cada turma, contar alunos
       const turmasComQtd = await Promise.all(
         (turmasData || []).map(async (turma) => {
           const { count } = await supabase
@@ -61,11 +62,15 @@ export default function useTurmasModel() {
   }
 
   function goAdicionarTurma() {
-    router.push(`professor/Home/turmas/add?nome=${nome}`)
+    router.push(`/professor/Home/turmas/add?nome=${nome}`)
   }
 
   function goDetalharTurma(turmaId: string) {
     router.push(`/professor/Home/turmas/info/${turmaId}?professor=${nome}`)
+  }
+
+  function voltar() {
+    router.back()
   }
 
   function handleLogout() {
@@ -74,11 +79,12 @@ export default function useTurmasModel() {
   }
 
   return {
-    nome, // ✅ direto do parâmetro
+    nome,
     turmas,
     loading,
     goAdicionarTurma,
     goDetalharTurma,
+    voltar,
     handleLogout,
   }
 }

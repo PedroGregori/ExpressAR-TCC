@@ -18,21 +18,31 @@ export default function useSelecionarTurmaModel() {
   async function buscarTurmas() {
     try {
       setLoading(true)
+      setTurmas([])
 
-      // 🔥 busca turmas
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser()
+
+      if (userError) throw userError
+      if (!user) throw new Error("Usuário não autenticado")
+
       const { data: turmasData, error } = await supabase
         .from("turmas")
         .select("id, nome, turno")
+        .eq("professor_id", user.id)
 
       if (error) throw error
 
-      // 🔥 conta alunos igual você já fez no outro model
       const turmasComQtd = await Promise.all(
         (turmasData || []).map(async (turma) => {
-          const { count } = await supabase
+          const { count, error: countError } = await supabase
             .from("alunos")
             .select("*", { count: "exact", head: true })
             .eq("turma_id", turma.id)
+
+          if (countError) throw countError
 
           return {
             ...turma,
@@ -42,9 +52,9 @@ export default function useSelecionarTurmaModel() {
       )
 
       setTurmas(turmasComQtd)
-
     } catch (e) {
       console.log("Erro ao buscar turmas:", e)
+      setTurmas([])
     } finally {
       setLoading(false)
     }
@@ -54,8 +64,14 @@ export default function useSelecionarTurmaModel() {
     buscarTurmas()
   }, [])
 
-  function selecionarTurma(id: string) {
-    router.push(`/professor/Home/cartoes/createCard/${id}`)
+  function selecionarTurma(id: string, nome: string) {
+    router.push({
+      pathname: "/professor/Home/cartoes/manageCategory",
+      params: {
+        turmaId: id,
+        nomeTurma: nome,
+      },
+    })
   }
 
   function voltar() {

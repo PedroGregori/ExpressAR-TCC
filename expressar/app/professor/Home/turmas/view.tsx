@@ -5,160 +5,228 @@ import {
   StyleSheet,
   StatusBar,
   FlatList,
+  Image,
+  LayoutChangeEvent,
 } from "react-native"
+import { useState } from "react"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen"
 import useTurmasModel from "./model"
+import { logos, icons } from "@/assets/images"
+import AppHeader from "@/components/AppHeader"
 
 export default function TurmasView({
-  nome,
   turmas,
   goAdicionarTurma,
   goDetalharTurma,
-  handleLogout,
+  voltar,
 }: ReturnType<typeof useTurmasModel>) {
+  const [contentHeight, setContentHeight] = useState(0)
+  const [listHeight, setListHeight] = useState(0)
+
+  const showFixedButton = contentHeight > listHeight && listHeight > 0
+
+  function renderTurmaCard(item: (typeof turmas)[number]) {
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => goDetalharTurma(item.id)}
+        activeOpacity={0.85}
+      >
+        <View style={styles.cardLeft}>
+          <Image source={icons.blackboard} style={styles.icon}></Image>
+
+          <View style={styles.cardInfo}>
+            <Text style={styles.cardTitle}>{item.nome}</Text>
+            <Text style={styles.cardSubtitle}>
+              {item.qtd_alunos} alunos · {item.turno}
+            </Text>
+          </View>
+        </View>
+
+        <Text style={styles.arrow}>›</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  function FooterButton() {
+    return (
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={goAdicionarTurma}
+        activeOpacity={0.85}
+      >
+        <Text style={styles.addText}>Adicionar turma</Text>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#6CC24A" />
+      <StatusBar barStyle="dark-content" backgroundColor="#8ED55F" />
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={{ fontSize: 30 }}>👨</Text>
-        </View>
+      <AppHeader
+        title="Turmas"
+        titleColor="#47892A"
+        onBack={voltar}
+        backgroundColor="#6BBA49"
+      />
 
-        <View style={{ flex: 1 }}>
-          <Text style={styles.welcome}>Bem vindo(a):</Text>
-          <Text style={styles.name}>{nome}</Text>
-        </View>
-
-        <TouchableOpacity style={styles.logout} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Sair</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* LISTA DE TURMAS */}
+      {/* CONTEÚDO */}
       <View style={styles.content}>
-        <Text style={styles.title}>Turmas</Text>
         <Text style={styles.subtitle}>Gerencie suas turmas cadastradas</Text>
 
-        {turmas.length === 0 ? (
-          <Text style={styles.emptyText}>Nenhuma turma cadastrada ainda.</Text>
-        ) : (
+        <View
+          style={styles.listContainer}
+          onLayout={(e: LayoutChangeEvent) =>
+            setListHeight(e.nativeEvent.layout.height)
+          }
+        >
           <FlatList
             data={turmas}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => goDetalharTurma(item.id)}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.cardTitle}>{item.nome}</Text>
-                  <Text style={styles.cardSubtitle}>
-                    {item.qtd_alunos} alunos · {item.turno}
-                  </Text>
-                </View>
-                <Text style={styles.arrow}>›</Text>
-              </TouchableOpacity>
-            )}
+            renderItem={({ item }) => renderTurmaCard(item)}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: hp("8%") }} // espaço p/ botão fixo
+            onContentSizeChange={(_, height) => setContentHeight(height)}
+            contentContainerStyle={[
+              styles.listContent,
+              showFixedButton && { paddingBottom: hp("12%") },
+            ]}
+            ListFooterComponent={!showFixedButton ? <FooterButton /> : null}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>Nenhuma turma cadastrada.</Text>
+                {!showFixedButton && <FooterButton />}
+              </View>
+            }
           />
-        )}
+        </View>
       </View>
 
       {/* BOTÃO FIXO */}
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.addButton} onPress={goAdicionarTurma}>
-          <Text style={styles.addText}>Adicionar turma</Text>
-        </TouchableOpacity>
-      </View>
+      {showFixedButton && (
+        <View style={styles.fixedFooter}>
+          <FooterButton />
+        </View>
+      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#DDE6D5" },
-
-  header: {
-    backgroundColor: "#6CC24A",
-    height: hp("18%"),
-    borderBottomLeftRadius: wp("6%"),
-    borderBottomRightRadius: wp("6%"),
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: wp("5%"),
+  container: {
+    flex: 1,
+    backgroundColor: "#F3F0E2",
   },
 
-  avatar: {
-    width: wp("14%"),
-    height: wp("14%"),
-    borderRadius: wp("7%"),
-    backgroundColor: "#fff",
+  content: {
+    flex: 1,
+    paddingHorizontal: wp("5%"),
+    paddingTop: hp("2%"),
+  },
+
+  subtitle: {
+    fontSize: wp("4%"),
+    color: "#6B6B6B",
+    marginBottom: hp("1.8%"),
+  },
+
+  listContainer: {
+    flex: 1,
+  },
+
+  listContent: {
+    paddingBottom: hp("3%"),
+  },
+
+  card: {
+    backgroundColor: "#F7F5EF",
+    borderRadius: wp("5%"),
+    paddingVertical: hp("1.8%"),
+    paddingHorizontal: wp("4%"),
+    marginBottom: hp("1.8%"),
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+
+  cardLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+
+  cardImage: {
+    width: wp("15%"),
+    height: wp("15%"),
     marginRight: wp("3%"),
   },
 
-  welcome: { color: "#fff", fontSize: wp("3.5%") },
-  name: { color: "#fff", fontSize: wp("5%"), fontWeight: "bold" },
-
-  logout: {
-    backgroundColor: "#8ED973",
-    paddingHorizontal: wp("4%"),
-    paddingVertical: hp("1%"),
-    borderRadius: wp("3%"),
+  cardInfo: {
+    flex: 1,
   },
-  logoutText: { color: "#fff", fontWeight: "600" },
 
-  content: { flex: 1, padding: wp("5%") },
-  title: { fontSize: wp("6%"), fontWeight: "bold", color: "#2E7D32" },
-  subtitle: { color: "#6B8E6B", marginBottom: hp("2%") },
-  emptyText: { textAlign: "center", marginTop: hp("2%"), color: "#777", fontSize: wp("4%") },
-
-  card: {
-    backgroundColor: "#fff",
-    padding: wp("4%"),
-    borderRadius: wp("4%"),
-    marginBottom: hp("1.5%"),
-    flexDirection: "row",
-    alignItems: "center",
-
-    // sombra leve
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 3,
+  cardTitle: {
+    fontSize: wp("4.3%"),
+    fontWeight: "700",
+    color: "#4F4F4F",
+    marginBottom: hp("0.2%"),
   },
-  cardTitle: { fontSize: wp("4%"), fontWeight: "bold" },
-  cardSubtitle: { color: "#777", fontSize: wp("3%") },
-  arrow: { fontSize: wp("6%"), color: "#000", marginLeft: wp("2%") },
 
-  footer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: wp("5%"),
-    backgroundColor: "#DDE6D5", // mantém a cor de fundo
+  cardSubtitle: {
+    fontSize: wp("3.3%"),
+    color: "#666666",
   },
+
+  arrow: {
+    fontSize: wp("7%"),
+    color: "#555",
+    marginLeft: wp("2%"),
+  },
+
   addButton: {
-    backgroundColor: "#8ED973",
-    height: hp("6%"),
-    borderRadius: wp("4%"),
+    backgroundColor: "#A8FF82CC",
+    borderRadius: wp("5%"),
+    minHeight: hp("6%"),
     alignItems: "center",
     justifyContent: "center",
-
-    // sombra leve
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 3,
+    paddingVertical: hp("1.6%"),
+    borderBottomWidth: 3,
+    borderBottomColor: "#6BBA49",
   },
-  addText: { color: "#fff", fontWeight: "bold", fontSize: wp("4%") },
+
+  addText: {
+    fontSize: wp("4.3%"),
+    fontWeight: "700",
+    color: "#6BBA49",
+  },
+
+  fixedFooter: {
+    position: "absolute",
+    left: wp("5%"),
+    right: wp("5%"),
+    bottom: hp("3%"),
+  },
+
+  emptyContainer: {
+    paddingTop: hp("2%"),
+  },
+
+  emptyText: {
+    textAlign: "center",
+    color: "#777",
+    fontSize: wp("4%"),
+    marginBottom: hp("2%"),
+  },
+
+  icon: {
+    marginRight: hp("1.5%")
+  },
 })

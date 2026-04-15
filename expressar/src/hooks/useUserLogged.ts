@@ -24,6 +24,7 @@ export function useUserLogged() {
     aluno,
     alunoId: aluno?.id,
     nomeAluno: aluno?.nome,
+    turmaId: aluno?.turma_id, // 🔥 ESSENCIAL
     loading,
   }
 }

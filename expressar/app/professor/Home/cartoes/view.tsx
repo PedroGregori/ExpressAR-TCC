@@ -5,12 +5,15 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
+  Image,
 } from "react-native"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen"
 import useSelecionarTurmaModel from "./model"
+import AppHeader from "@/components/AppHeader"
+import { icons } from "@/assets/images"
 
 export default function SelecionarTurmaView({
   turmas,
@@ -21,18 +24,15 @@ export default function SelecionarTurmaView({
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#E8C96E" />
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={voltar}>
-          <Text style={styles.back}>←</Text>
-        </TouchableOpacity>
+      <AppHeader
+        title="Criar cartões"
+        onBack={voltar}
+        backgroundColor="#E8C96E"
+        titleColor="#6B5A2B"
+        iconColor="#6B5A2B"
+        backImg={icons.yback}
+      />
 
-        <Text style={styles.title}>Criar cartões</Text>
-
-        <Text style={styles.menu}>≡</Text>
-      </View>
-
-      {/* CONTEÚDO */}
       <View style={styles.content}>
         <Text style={styles.subtitle}>Escolha uma turma</Text>
 
@@ -41,11 +41,11 @@ export default function SelecionarTurmaView({
             <TouchableOpacity
               key={turma.id}
               style={styles.card}
-              onPress={() => selecionarTurma(turma.id)}
+              onPress={() => selecionarTurma(turma.id, turma.nome)}
               activeOpacity={0.8}
             >
               <View style={styles.iconBox}>
-                <Text style={styles.icon}>📚</Text>
+                <Image source={icons.blackboard}></Image>
               </View>
 
               <View style={styles.info}>
@@ -70,41 +70,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#F3E7C9",
   },
 
-  /* HEADER */
-  header: {
-    backgroundColor: "#E8C96E",
-    paddingTop: hp("6%"),
-    paddingBottom: hp("2%"),
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: wp("4%"),
-  },
-  back: {
-    fontSize: wp("6%"),
-    color: "#6B5A2B",
-  },
-  title: {
-    fontSize: wp("5%"),
-    fontWeight: "600",
-    color: "#6B5A2B",
-  },
-  menu: {
-    fontSize: wp("6%"),
-    color: "#6B5A2B",
-  },
-
-  /* CONTENT */
   content: {
+    flex: 1,
     padding: wp("4%"),
   },
+
   subtitle: {
     fontSize: wp("4%"),
     color: "#7A6A3A",
     marginBottom: hp("2%"),
   },
 
-  /* CARD */
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -117,6 +93,7 @@ const styles = StyleSheet.create({
   iconBox: {
     marginRight: wp("3%"),
   },
+
   icon: {
     fontSize: wp("10%"),
   },
@@ -124,11 +101,13 @@ const styles = StyleSheet.create({
   info: {
     flex: 1,
   },
+
   nome: {
     fontSize: wp("4.2%"),
     fontWeight: "600",
     color: "#4A3F1D",
   },
+
   desc: {
     fontSize: wp("3.5%"),
     color: "#8C7A4A",

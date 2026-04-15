@@ -12,12 +12,15 @@ type Aluno = {
 
 export default function useAlunoModel() {
   const router = useRouter()
-  const { alunoCodigo, nome } = useLocalSearchParams<{ alunoCodigo: string; nome: string }>()
-
-  console.log(alunoCodigo)
+  const { alunoCodigo, nome } = useLocalSearchParams<{
+    alunoCodigo: string
+    nome: string
+  }>()
 
   const [aluno, setAluno] = useState<Aluno | null>(null)
   const [loading, setLoading] = useState(true)
+  const [popupRemover, setPopupRemover] = useState(false)
+  const [removendo, setRemovendo] = useState(false)
 
   useEffect(() => {
     if (alunoCodigo) loadData()
@@ -28,7 +31,7 @@ export default function useAlunoModel() {
       const { data } = await supabase
         .from("alunos")
         .select("id, nome, idade, sexo, codigo")
-        .eq("codigo", alunoCodigo)   // ✅ agora busca pelo id
+        .eq("codigo", alunoCodigo)
         .single()
 
       if (data) setAluno(data as Aluno)
@@ -45,20 +48,50 @@ export default function useAlunoModel() {
   }
 
   function verRelatorio() {
-    if (aluno) router.push(`/professor/Home/alunos/relatorio?codigo=${aluno.codigo}&nome=${nome}`)
+    if (aluno) {
+      router.push(
+        `/professor/Home/alunos/relatorio?codigo=${aluno.codigo}&nome=${nome}`
+      )
+    }
   }
 
   function editarAluno() {
-    if (aluno) router.push(`/professor/Home/alunos/editar?codigo=${aluno.codigo}&nome=${nome}`)
+    if (aluno) {
+      router.push(
+        `/professor/Home/turmas/alunoInfo/${aluno.codigo}/editAluno?nome=${nome}`
+      )
+    }
   }
 
-  async function removerAluno() {
+  function voltar() {
+    router.back()
+  }
+
+  function abrirPopupRemover() {
+    setPopupRemover(true)
+  }
+
+  function fecharPopupRemover() {
+    setPopupRemover(false)
+  }
+
+  async function confirmarRemocao() {
     if (!aluno) return
+
     try {
-      await supabase.from("alunos").delete().eq("codigo", aluno.codigo)
+      setRemovendo(true)
+
+      await supabase
+        .from("alunos")
+        .delete()
+        .eq("codigo", aluno.codigo)
+
+      setPopupRemover(false)
       router.back()
     } catch (e) {
       console.log("Erro ao remover aluno:", e)
+    } finally {
+      setRemovendo(false)
     }
   }
 
@@ -66,9 +99,14 @@ export default function useAlunoModel() {
     nome,
     aluno,
     loading,
+    popupRemover,
+    removendo,
     handleLogout,
     verRelatorio,
     editarAluno,
-    removerAluno,
+    abrirPopupRemover,
+    fecharPopupRemover,
+    confirmarRemocao,
+    voltar,
   }
 }

@@ -15,6 +15,7 @@ import {
 } from "react-native-responsive-screen"
 
 import useAddTurmaModel from "./model"
+import AppHeader from "@/components/AppHeader"
 
 export default function AddTurmaView({
   nomeTurma,
@@ -32,10 +33,12 @@ export default function AddTurmaView({
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#6CC24A" />
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Adicionar turma</Text>
-      </View>
+      <AppHeader
+        title="Adicionar Turma"
+        titleColor="#47892A"
+        onBack={handleCancel}
+        backgroundColor="#6BBA49"
+      />
 
       {/* FORM */}
       <View style={styles.form}>
@@ -96,6 +99,7 @@ export default function AddTurmaView({
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#DDE6D5" },
+
   header: {
     backgroundColor: "#6CC24A",
     height: hp("12%"),
@@ -104,50 +108,83 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: wp("6%"),
     borderBottomRightRadius: wp("6%"),
   },
+
   headerText: { color: "#fff", fontSize: wp("6%"), fontWeight: "bold" },
-  form: { flex: 1, padding: wp("5%") },
+
+  form: {
+    marginTop: hp("2%"),
+    marginHorizontal: wp("4%"),
+    backgroundColor: "#F6F8F3",
+    borderRadius: wp("5%"),
+    paddingHorizontal: wp("5%"),
+    paddingVertical: hp("2.5%"),
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+
   label: {
     fontSize: wp("4%"),
-    fontWeight: "600",
-    marginTop: hp("2%"),
-    color: "#2E7D32",
+    fontWeight: "700",
+    marginTop: hp("1.5%"),
+    marginBottom: hp("0.8%"),
+    color: "#4F8A2F",
   },
+
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: "#F6FFEE",
     borderRadius: wp("3%"),
-    padding: wp("4%"),
-    marginTop: hp("1%"),
-    borderWidth: 2,
-    borderColor: "#6CC24A", // 🔥 borda verde
+    paddingHorizontal: wp("4%"),
+    height: hp("6%"),
+    borderWidth: 1.5,
+    borderColor: "#8BCB67",
+    color: "#333",
   },
+
   dropdown: {
-    backgroundColor: "#fff",
+    backgroundColor: "#F6F8F3",
     borderRadius: wp("3%"),
-    marginTop: hp("1%"),
-    borderWidth: 2,
-    borderColor: "#6CC24A", // 🔥 borda verde
+    minHeight: hp("6%"),
+    borderWidth: 1.5,
+    borderColor: "#8BCB67",
   },
+
   dropdownContainer: {
-    backgroundColor: "#fff",
-    borderWidth: 2,
-    borderColor: "#6CC24A", // 🔥 borda verde
+    backgroundColor: "#F6FFEE",
+    borderWidth: 1.5,
+    borderColor: "#8BCB67",
+    borderRadius: wp("3%"),
+    overflow: "hidden",
   },
+
   buttons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: hp("4%"),
+    marginTop: hp("3%"),
   },
+
   button: {
     flex: 1,
-    height: hp("6%"),
+    height: hp("5.8%"),
     borderRadius: wp("3%"),
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: wp("1%"),
+    marginHorizontal: wp("1.2%"),
   },
-  cancel: { backgroundColor: "#E57373" },
+
+  cancel: { backgroundColor: "#D9534F" },
+
   create: { backgroundColor: "#6CC24A" },
-  buttonText: { color: "#fff", fontWeight: "bold", fontSize: wp("4%") },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: wp("3.8%"),
+  },
+
   errorText: {
     color: "#E53935",
     marginTop: hp("1%"),

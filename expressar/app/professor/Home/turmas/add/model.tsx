@@ -8,17 +8,66 @@ export default function useAddTurmaModel() {
   const [nomeTurma, setNomeTurma] = useState("")
   const [turno, setTurno] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("") // 🔥 estado para mensagens de erro
+  const [error, setError] = useState("")
+
+  async function copiarCategoriasBaseParaTurma(turmaId: string) {
+    const { data: categoriasBase, error: erroCategorias } = await supabase
+      .from("categorias_base")
+      .select("id, nome, imagem, tem_subcategoria")
+
+    if (erroCategorias) throw erroCategorias
+
+    for (const categoriaBase of categoriasBase || []) {
+      const { data: categoriaCriada, error: erroCategoriaCriada } = await supabase
+        .from("categorias")
+        .insert({
+          nome: categoriaBase.nome,
+          imagem: categoriaBase.imagem,
+          turma_id: turmaId,
+          tem_subcategoria: categoriaBase.tem_subcategoria,
+          categoria_base_id: categoriaBase.id,
+        })
+        .select("id")
+        .single()
+
+      if (erroCategoriaCriada) throw erroCategoriaCriada
+
+      if (categoriaBase.tem_subcategoria) {
+        const { data: subcategoriasBase, error: erroSubs } = await supabase
+          .from("subcategorias_base")
+          .select("id, nome, imagem")
+          .eq("categoria_base_id", categoriaBase.id)
+
+        if (erroSubs) throw erroSubs
+
+        if (subcategoriasBase && subcategoriasBase.length > 0) {
+          const subcategoriasParaInserir = subcategoriasBase.map((sub) => ({
+            nome: sub.nome,
+            imagem: sub.imagem,
+            categoria_id: categoriaCriada.id,
+            turma_id: turmaId,
+            subcategoria_base_id: sub.id,
+          }))
+
+          const { error: erroInsertSubs } = await supabase
+            .from("subcategorias")
+            .insert(subcategoriasParaInserir)
+
+          if (erroInsertSubs) throw erroInsertSubs
+        }
+      }
+    }
+  }
 
   async function handleCreateTurma() {
     try {
-      setError("") // limpa erro anterior
+      setError("")
 
-      // 🔥 validações
       if (!nomeTurma.trim()) {
         setError("O nome da turma é obrigatório.")
         return
       }
+
       if (!turno) {
         setError("Selecione um turno válido.")
         return
@@ -26,21 +75,28 @@ export default function useAddTurmaModel() {
 
       setLoading(true)
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
       if (!user) {
         router.replace("/")
         return
       }
 
-      const { error: insertError } = await supabase
+      const { data: turmaCriada, error: insertError } = await supabase
         .from("turmas")
         .insert({
-          nome: nomeTurma,
+          nome: nomeTurma.trim(),
           turno,
           professor_id: user.id,
         })
+        .select("id")
+        .single()
 
       if (insertError) throw insertError
+
+      await copiarCategoriasBaseParaTurma(turmaCriada.id)
 
       router.replace("professor/Home/turmas")
     } catch (e) {
@@ -61,7 +117,7 @@ export default function useAddTurmaModel() {
     turno,
     setTurno,
     loading,
-    error, // 🔥 expõe o erro para a View
+    error,
     handleCreateTurma,
     handleCancel,
   }

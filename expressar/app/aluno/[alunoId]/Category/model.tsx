@@ -2,27 +2,32 @@ import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { supabase } from '@/lib/supabase'
 
-// ============================================================
-// Categorias fixas do MVP
-// ============================================================
-const CATEGORIAS = [
-  { id: '1', nome: 'Comidas',      emoji: '🍎', cor: '#FF8A65' },
-  { id: '2', nome: 'Emoções',      emoji: '😊', cor: '#FFB74D' },
-  { id: '3', nome: 'Escola',       emoji: '🎒', cor: '#81C784' },
-  { id: '4', nome: 'Necessidades', emoji: '🚿', cor: '#64B5F6' },
-  { id: '5', nome: 'Comunicação',  emoji: '💬', cor: '#BA68C8' },
-]
-
-const CATEGORIAS_COM_SUB = ['Comidas', 'Escola']
+type Categoria = {
+  id: string
+  nome: string
+  imagem?: string
+  tem_subcategoria: boolean
+}
 
 export default function useCategoryModel() {
   const router = useRouter()
+
   const [nomeAluno, setNomeAluno] = useState('')
   const [alunoId, setAlunoId] = useState('')
+  const [turmaId, setTurmaId] = useState('')
+  const [categorias, setCategorias] = useState<Categoria[]>([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    async function verificarAluno() {
+    carregarDados()
+  }, [])
+
+  async function carregarDados() {
+    try {
+      setLoading(true)
+
       const alunoStorage = await AsyncStorage.getItem('aluno')
 
       if (!alunoStorage) {
@@ -34,10 +39,25 @@ export default function useCategoryModel() {
 
       setAlunoId(aluno.id)
       setNomeAluno(aluno.nome)
-    }
+      setTurmaId(aluno.turma_id)
 
-    verificarAluno()
-  }, [])
+      const { data, error } = await supabase
+        .from('categorias')
+        .select('id, nome, imagem, tem_subcategoria')
+        .eq('turma_id', aluno.turma_id)
+        .order('created_at', { ascending: true })
+
+      if (error) throw error
+
+      if (data) {
+        setCategorias(data)
+      }
+    } catch (e) {
+      console.log('Erro ao buscar categorias:', e)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   function handleSair() {
     Alert.alert(
@@ -57,31 +77,33 @@ export default function useCategoryModel() {
     )
   }
 
-  async function handleCategoria(categoriaId: string, categoriaNome: string) {
-    const temSub = CATEGORIAS_COM_SUB.includes(categoriaNome)
-
-    if (temSub) {
+  function handleCategoria(categoria: Categoria) {
+    if (categoria.tem_subcategoria) {
       router.push({
         pathname: '/aluno/[id]/Category/SubCategory',
         params: {
           id: alunoId,
-          nome: categoriaNome
-        }
+          categoriaId: categoria.id,
+          nome: categoria.nome,
+        },
       })
     } else {
       router.push({
         pathname: '/aluno/[id]/Category/CategoryDetail',
         params: {
           id: alunoId,
-          nome: categoriaNome
-        }
+          categoriaId: categoria.id,
+          nome: categoria.nome,
+        },
       })
     }
   }
 
   return {
     nomeAluno,
-    categorias: CATEGORIAS,
+    turmaId,
+    categorias,
+    loading,
     handleSair,
     handleCategoria,
   }

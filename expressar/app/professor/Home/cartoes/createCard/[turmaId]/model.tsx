@@ -22,7 +22,6 @@ export default function useCriarCartaoModel() {
 
   const [nomeProfessor] = useState(professor)
 
-  // 🔥 RECEBE IMAGEM DA OUTRA TELA
   useEffect(() => {
     if (imagemParam) {
       setImagem(imagemParam)
@@ -63,6 +62,10 @@ export default function useCriarCartaoModel() {
     }
   }
 
+  function voltar() {
+    router.back()
+  }
+
   function fecharPopup() {
     setPopup(null)
   }
@@ -73,17 +76,26 @@ export default function useCriarCartaoModel() {
     setPopup(null)
   }
 
-  // 🔥 IR PRA BUSCA (CORRIGIDO)
   function irPesquisarImagem() {
-    router.push(
-      `/professor/Home/cartoes/searchPic/${turmaId}?professor=${professor}`
-    )
+    router.push({
+      pathname: "/professor/Home/cartoes/searchPic/[turmaId]",
+      params: {
+        turmaId,
+        professor,
+        destino: "cartao",
+      },
+    })
   }
 
   function irSelecionarGaleria() {
-    router.push(
-      `/professor/Home/turmas/selecionarGaleria/${turmaId}?professor=${professor}`
-    )
+    router.push({
+      pathname: "/professor/Home/turmas/selecionarGaleria/[turmaId]",
+      params: {
+        turmaId,
+        professor,
+        destino: "cartao",
+      },
+    })
   }
 
   return {
@@ -100,5 +112,6 @@ export default function useCriarCartaoModel() {
     handleLogout,
     irPesquisarImagem,
     irSelecionarGaleria,
+    voltar,
   }
 }

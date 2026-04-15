@@ -55,6 +55,10 @@ export default function useInfoModel() {
     router.push(`/professor/Home/turmas/alunoInfo/${alunoCodigo}?professor=${professor}`)
   }
 
+  function voltar() {
+    router.back()
+  }
+
   return {
     nomeProfessor: professor,
     turmaNome,
@@ -63,5 +67,6 @@ export default function useInfoModel() {
     handleLogout,
     goAdicionarAluno,
     goGerenciarAluno,
+    voltar,
   }
 }

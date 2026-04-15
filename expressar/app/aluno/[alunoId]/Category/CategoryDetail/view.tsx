@@ -19,6 +19,7 @@ import { useTextToSpeech } from '@/hooks/useAudio'
 
 import { useSentenceBuilder } from '@/hooks/useSentenceBuilder'
 import SentenceBuilder from '@/components/SentenceBuilder'
+import UserHeader from '@/components/UserHeader'
 
 export default function CategoryDetailView({
   pictogramas,
@@ -34,18 +35,12 @@ export default function CategoryDetailView({
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#5BC8E8" />
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        <View style={styles.headerInfo}>
-          <View style={styles.avatarPlaceholder}>
-            <Text style={styles.avatarEmoji}>👧</Text>
-          </View>
-          <View>
-            <Text style={styles.headerBemVindo}>Bem vindo(a):</Text>
-            <Text style={styles.headerNome}>{nomeAluno}</Text>
-          </View>
-        </View>
-      </View>
+      <UserHeader
+        nome={nomeAluno}
+        onAction={handleVoltar}
+        backgroundColor="#5BC8E8"
+        emoji="👧"
+      />
 
       {/* CONSTRUTOR */}
       <SentenceBuilder />
