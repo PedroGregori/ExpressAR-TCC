@@ -7,6 +7,7 @@ type Categoria = {
   nome: string
   imagem: string | null
   total_cartoes: number
+  total_subcategorias: number
 }
 
 export default function useCategoriasTurmaModel() {
@@ -35,24 +36,36 @@ export default function useCategoriasTurmaModel() {
 
       if (error) throw error
 
-      const categoriasComTotal = await Promise.all(
+      const categoriasComTotais = await Promise.all(
         (categoriasData || []).map(async (categoria) => {
-          const { count, error: countError } = await supabase
-            .from("cartoes")
-            .select("*", { count: "exact", head: true })
-            .eq("categoria_id", categoria.id)
-            .eq("turma_id", turmaId)
+          const [
+            { count: totalCartoes, error: countCartoesError },
+            { count: totalSubcategorias, error: countSubcategoriasError },
+          ] = await Promise.all([
+            supabase
+              .from("cartoes")
+              .select("*", { count: "exact", head: true })
+              .eq("categoria_id", categoria.id)
+              .eq("turma_id", turmaId),
 
-          if (countError) throw countError
+            supabase
+              .from("subcategorias")
+              .select("*", { count: "exact", head: true })
+              .eq("categoria_id", categoria.id),
+          ])
+
+          if (countCartoesError) throw countCartoesError
+          if (countSubcategoriasError) throw countSubcategoriasError
 
           return {
             ...categoria,
-            total_cartoes: count ?? 0,
+            total_cartoes: totalCartoes ?? 0,
+            total_subcategorias: totalSubcategorias ?? 0,
           }
         })
       )
 
-      setCategorias(categoriasComTotal)
+      setCategorias(categoriasComTotais)
     } catch (e) {
       console.log("Erro ao buscar categorias:", e)
     } finally {

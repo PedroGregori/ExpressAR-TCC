@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 import { useRouter, useLocalSearchParams } from "expo-router"
+import { useCardImageStore } from "@/store/useCardImageStore"
 
 export default function useCriarCartaoModel() {
   const router = useRouter()
@@ -8,25 +9,63 @@ export default function useCriarCartaoModel() {
   const {
     turmaId,
     professor,
+    categoriaId,
+    subcategoriaId,
     imagem: imagemParam,
+    nome: nomeParam,
+    destino,
   } = useLocalSearchParams<{
     turmaId: string
-    professor: string
+    professor?: string
+    categoriaId?: string
+    subcategoriaId?: string
     imagem?: string
+    nome?: string
+    destino?: "cartao" | "subcategoria"
   }>()
 
-  const [nome, setNome] = useState("")
-  const [imagem, setImagem] = useState<string | null>(null)
+  const destinoAtual = destino ?? (subcategoriaId ? "subcategoria" : "cartao")
+
+  const imagemSelecionada = useCardImageStore(
+    (state) => state.imagemSelecionada
+  )
+  const setImagemSelecionada = useCardImageStore(
+    (state) => state.setImagemSelecionada
+  )
+
+  const [nome, setNome] = useState(nomeParam ?? "")
+  const [imagem, setImagem] = useState<string | null>(imagemParam ?? null)
   const [loading, setLoading] = useState(false)
   const [popup, setPopup] = useState<{ id: string; nome: string } | null>(null)
 
   const [nomeProfessor] = useState(professor)
 
   useEffect(() => {
-    if (imagemParam) {
+  console.log("DEBUG PARAMS:", {
+    turmaId,
+    categoriaId,
+    subcategoriaId,
+  })
+}, [])
+
+  useEffect(() => {
+    if (typeof imagemParam === "string" && imagemParam.trim() !== "") {
       setImagem(imagemParam)
     }
   }, [imagemParam])
+
+  useEffect(() => {
+    if (typeof nomeParam === "string") {
+      setNome(nomeParam)
+    }
+  }, [nomeParam])
+
+  useEffect(() => {
+    if (imagemSelecionada) {
+      setImagem(imagemSelecionada)
+      setImagemSelecionada(null)
+    }
+  }, [imagemSelecionada, setImagemSelecionada])
 
   function handleLogout() {
     supabase.auth.signOut()
@@ -40,9 +79,11 @@ export default function useCriarCartaoModel() {
       const { data, error } = await supabase
         .from("cartoes")
         .insert({
-          nome,
+          nome: nome.trim(),
           imagem,
           turma_id: turmaId,
+          categoria_id: categoriaId ?? null,
+          subcategoria_id: subcategoriaId ?? null,
         })
         .select("id, nome")
         .single()
@@ -74,6 +115,7 @@ export default function useCriarCartaoModel() {
     setNome("")
     setImagem(null)
     setPopup(null)
+    setImagemSelecionada(null)
   }
 
   function irPesquisarImagem() {
@@ -82,7 +124,10 @@ export default function useCriarCartaoModel() {
       params: {
         turmaId,
         professor,
-        destino: "cartao",
+        destino: destinoAtual,
+        categoriaId,
+        subcategoriaId,
+        nome,
       },
     })
   }
@@ -93,9 +138,12 @@ export default function useCriarCartaoModel() {
       params: {
         turmaId,
         professor,
-        destino: "cartao",
-      },
-    })
+        destino: destinoAtual,
+        categoriaId,
+        subcategoriaId,
+        nome,
+        },
+      })
   }
 
   return {

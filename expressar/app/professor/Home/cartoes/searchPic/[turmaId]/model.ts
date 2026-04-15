@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useRouter, useLocalSearchParams } from "expo-router"
 import { buscarPictogramas } from "@/services/arasaac/arasaacService"
+import { useCardImageStore } from "@/store/useCardImageStore"
 
 type Pictograma = {
   _id: number
@@ -10,6 +11,9 @@ type Destino = "cartao" | "categoria" | "subcategoria"
 
 export default function usePesquisarImagemModel() {
   const router = useRouter()
+  const setImagemSelecionada = useCardImageStore(
+    (state) => state.setImagemSelecionada
+  )
 
   const {
     turmaId,
@@ -17,12 +21,16 @@ export default function usePesquisarImagemModel() {
     destino,
     nomeTurma,
     categoriaId,
+    subcategoriaId,
+    nome,
   } = useLocalSearchParams<{
     turmaId: string
     professor?: string
     destino: Destino
     nomeTurma?: string
     categoriaId?: string
+    subcategoriaId?: string
+    nome?: string
   }>()
 
   const [busca, setBusca] = useState("")
@@ -47,13 +55,8 @@ export default function usePesquisarImagemModel() {
     const url = `https://static.arasaac.org/pictograms/${id}/${id}_500.png`
 
     if (destino === "cartao") {
-      router.replace({
-        pathname: `/professor/Home/cartoes/createCard/${turmaId}`,
-        params: {
-          professor,
-          imagem: url,
-        },
-      })
+      setImagemSelecionada(url)
+      router.back()
       return
     }
 
@@ -63,6 +66,7 @@ export default function usePesquisarImagemModel() {
         params: {
           turmaId,
           nomeTurma,
+          professor,
           imagem: url,
         },
       })
@@ -70,15 +74,8 @@ export default function usePesquisarImagemModel() {
     }
 
     if (destino === "subcategoria") {
-      router.replace({
-        pathname: "/professor/Home/cartoes/createSubCategory",
-        params: {
-          turmaId,
-          nomeTurma,
-          categoriaId,
-          imagem: url,
-        },
-      })
+      setImagemSelecionada(url)
+      router.back()
       return
     }
   }

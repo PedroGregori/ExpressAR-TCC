@@ -22,10 +22,11 @@ export default function useSubCategoryModel() {
   const [subcategorias, setSubcategorias] = useState<Subcategoria[]>([])
   const [loading, setLoading] = useState(false)
 
-  // 🔥 BUSCAR DO BANCO
   useEffect(() => {
-    buscarSubcategorias()
-  }, [])
+    if (categoriaId) {
+      buscarSubcategorias()
+    }
+  }, [categoriaId])
 
   async function buscarSubcategorias() {
     try {
@@ -38,9 +39,7 @@ export default function useSubCategoryModel() {
 
       if (error) throw error
 
-      if (data) {
-        setSubcategorias(data)
-      }
+      setSubcategorias(data || [])
     } catch (e) {
       console.log('Erro ao buscar subcategorias:', e)
     } finally {
@@ -54,6 +53,7 @@ export default function useSubCategoryModel() {
       params: {
         nome: sub.nome,
         subcategoriaId: sub.id,
+        categoriaId, // 🔥 CORREÇÃO PRINCIPAL
       },
     })
   }

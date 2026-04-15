@@ -1,7 +1,7 @@
-import CategoriasTurmaView from "./view"
 import useCategoriasTurmaModel from "./model"
+import CategoriasTurmaView from "./view"
 
-export default function CategoriasTurmaViewModel() {
+export default function SelecionarTurmaViewModel() {
   const model = useCategoriasTurmaModel()
 
   return <CategoriasTurmaView {...model} />

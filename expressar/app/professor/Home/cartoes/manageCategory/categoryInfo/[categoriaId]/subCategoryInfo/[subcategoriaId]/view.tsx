@@ -13,24 +13,23 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen"
 import AppHeader from "@/components/AppHeader"
-import useManageCategoryModel from "./model"
+import useManageSubCategoryModel from "./model"
 import { icons } from "@/assets/images"
 
-export default function ManageCategoryView({
-  nomeCategoria,
-  subcategorias,
+export default function ManageSubCategoryView({
+  nomeSubcategoria,
+  cartoes,
   loading,
   voltar,
-  irCriarSubcategoria,
   irCriarCartao,
-  irGerenciarSubcategoria,
-}: ReturnType<typeof useManageCategoryModel>) {
+  irGerenciarCartao,
+}: ReturnType<typeof useManageSubCategoryModel>) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#E8C96E" />
 
       <AppHeader
-        title="Gerenciar categoria"
+        title="Gerenciar subcategoria"
         titleColor="#8F7630"
         iconColor="#8C7331"
         onBack={voltar}
@@ -39,7 +38,7 @@ export default function ManageCategoryView({
       />
 
       <View style={styles.content}>
-        <Text style={styles.categoryTitle}>{nomeCategoria}</Text>
+        <Text style={styles.categoryTitle}>{nomeSubcategoria}</Text>
 
         {loading ? (
           <View style={styles.loadingContainer}>
@@ -47,52 +46,41 @@ export default function ManageCategoryView({
             <Text style={styles.loadingText}>Carregando...</Text>
           </View>
         ) : (
-          <>
-            <ScrollView
-              contentContainerStyle={styles.grid}
-              showsVerticalScrollIndicator={false}
-            >
-              {subcategorias.map((subcategoria) => (
-                <TouchableOpacity
-                  key={subcategoria.id}
-                  style={styles.card}
-                  onPress={() =>
-                    irGerenciarSubcategoria(subcategoria.id, subcategoria.nome)
-                  }
-                  activeOpacity={0.85}
-                >
-                  {subcategoria.imagem ? (
-                    <Image
-                      source={{ uri: subcategoria.imagem }}
-                      style={styles.cardImage}
-                      resizeMode="contain"
-                    />
-                  ) : (
-                    <Text style={styles.emojiFallback}>📁</Text>
-                  )}
-
-                  <Text style={styles.cardText}>{subcategoria.nome}</Text>
-                </TouchableOpacity>
-              ))}
-
+          <ScrollView
+            contentContainerStyle={styles.grid}
+            showsVerticalScrollIndicator={false}
+          >
+            {cartoes.map((cartao) => (
               <TouchableOpacity
-                style={[styles.card, styles.addCard]}
-                onPress={irCriarCartao}
+                key={`card-${cartao.id}`}
+                style={styles.card}
+                onPress={() => irGerenciarCartao(cartao.id, cartao.nome)}
                 activeOpacity={0.85}
               >
-                <Text style={styles.addIcon}>＋</Text>
-                <Text style={styles.cardText}>Adicionar cartão</Text>
+                {cartao.imagem ? (
+                  <Image
+                    source={{ uri: cartao.imagem }}
+                    style={styles.cardImage}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Text style={styles.emojiFallback}>🃏</Text>
+                )}
+
+                <Text style={styles.cardText}>{cartao.nome}</Text>
+                <Text style={styles.cardType}>Cartão</Text>
               </TouchableOpacity>
-            </ScrollView>
+            ))}
 
             <TouchableOpacity
-              style={styles.addButton}
-              onPress={irCriarSubcategoria}
+              style={[styles.card, styles.addCard]}
+              onPress={irCriarCartao}
               activeOpacity={0.85}
             >
-              <Text style={styles.addButtonText}>Adicionar subcategoria</Text>
+              <Text style={styles.addIcon}>＋</Text>
+              <Text style={styles.cardText}>Adicionar cartão</Text>
             </TouchableOpacity>
-          </>
+          </ScrollView>
         )}
       </View>
     </View>
@@ -140,7 +128,7 @@ const styles = StyleSheet.create({
 
   card: {
     width: "47%",
-    height: hp("17%"),
+    height: hp("18%"),
     backgroundColor: "#F7F5F1",
     borderRadius: wp("4%"),
     alignItems: "center",
@@ -172,6 +160,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  cardType: {
+    marginTop: hp("0.6%"),
+    fontSize: wp("3%"),
+    color: "#B1944C",
+    textAlign: "center",
+  },
+
   addCard: {
     borderWidth: 1.5,
     borderStyle: "dashed",
@@ -184,25 +179,5 @@ const styles = StyleSheet.create({
     color: "#E2B853",
     fontWeight: "400",
     lineHeight: wp("16%"),
-  },
-
-  addButton: {
-    marginTop: "auto",
-    backgroundColor: "#F2CF69",
-    height: hp("6%"),
-    borderRadius: wp("5%"),
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#B88A1F",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.18,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-
-  addButtonText: {
-    color: "#8E742A",
-    fontWeight: "700",
-    fontSize: wp("4%"),
   },
 })

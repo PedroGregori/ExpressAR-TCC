@@ -2,50 +2,55 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
 import { useLocalSearchParams, useRouter } from "expo-router"
 
-type Subcategoria = {
+type Cartao = {
   id: string
   nome: string
   imagem: string | null
 }
 
-export default function useManageCategoryModel() {
+export default function useManageSubCategoryModel() {
   const router = useRouter()
 
   const {
+    subcategoriaId,
     categoriaId,
     turmaId,
     nomeCategoria,
+    nomeSubcategoria,
   } = useLocalSearchParams<{
+    subcategoriaId: string
     categoriaId: string
     turmaId: string
     nomeCategoria: string
+    nomeSubcategoria: string
   }>()
 
-  const [subcategorias, setSubcategorias] = useState<Subcategoria[]>([])
+  const [cartoes, setCartoes] = useState<Cartao[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (categoriaId) {
-      buscarSubcategorias()
+    if (subcategoriaId && turmaId) {
+      buscarCartoes()
     }
-  }, [categoriaId])
+  }, [subcategoriaId, turmaId])
 
-  async function buscarSubcategorias() {
+  async function buscarCartoes() {
     try {
       setLoading(true)
 
       const { data, error } = await supabase
-        .from("subcategorias")
+        .from("cartoes")
         .select("id, nome, imagem")
-        .eq("categoria_id", categoriaId)
+        .eq("subcategoria_id", subcategoriaId)
+        .eq("turma_id", turmaId)
         .order("created_at", { ascending: true })
 
       if (error) throw error
 
-      setSubcategorias(data || [])
+      setCartoes(data || [])
     } catch (e) {
-      console.log("Erro ao buscar subcategorias:", e)
-      setSubcategorias([])
+      console.log("Erro ao buscar cartões da subcategoria:", e)
+      setCartoes([])
     } finally {
       setLoading(false)
     }
@@ -55,48 +60,41 @@ export default function useManageCategoryModel() {
     router.back()
   }
 
-  function irCriarSubcategoria() {
-    router.push({
-      pathname: "/professor/Home/cartoes/createSubCategory",
-      params: {
-        categoriaId,
-        turmaId,
-        nomeCategoria,
-      },
-    })
-  }
-
   function irCriarCartao() {
     router.push({
       pathname: "/professor/Home/cartoes/createCard/[turmaId]",
       params: {
         turmaId,
         categoriaId,
+        subcategoriaId,
         nomeCategoria,
+        nomeSubcategoria,
+        destino: "subcategoria",
       },
     })
   }
 
-  function irGerenciarSubcategoria(subcategoriaId: string, nomeSubcategoria: string) {
+  function irGerenciarCartao(cartaoId: string, nomeCartao: string) {
     router.push({
-      pathname: "/professor/Home/cartoes/manageSubCategory",
+      pathname: "/professor/Home/cartoes/manageCard/[cartaoId]",
       params: {
-        subcategoriaId,
+        cartaoId,
         categoriaId,
+        subcategoriaId,
         turmaId,
         nomeCategoria,
         nomeSubcategoria,
+        nomeCartao,
       },
     })
   }
 
   return {
-    nomeCategoria,
-    subcategorias,
+    nomeSubcategoria,
+    cartoes,
     loading,
     voltar,
-    irCriarSubcategoria,
     irCriarCartao,
-    irGerenciarSubcategoria,
+    irGerenciarCartao,
   }
 }

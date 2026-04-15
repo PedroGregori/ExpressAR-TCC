@@ -72,9 +72,17 @@ export default function CategoriasTurmaView({
 
                   <View style={styles.info}>
                     <Text style={styles.nome}>{categoria.nome}</Text>
+
                     <Text style={styles.desc}>
                       {categoria.total_cartoes}{" "}
-                      {categoria.total_cartoes === 1 ? "Cartão" : "Cartões"}
+                      {categoria.total_cartoes === 1 ? "cartão" : "cartões"}
+                    </Text>
+
+                    <Text style={styles.desc}>
+                      {categoria.total_subcategorias}{" "}
+                      {categoria.total_subcategorias === 1
+                        ? "subcategoria"
+                        : "subcategorias"}
                     </Text>
                   </View>
                 </View>

@@ -7,6 +7,7 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native'
 
 import {
@@ -16,14 +17,13 @@ import {
 
 import useCategoryDetail from './model'
 import { useTextToSpeech } from '@/hooks/useAudio'
-
 import { useSentenceBuilder } from '@/hooks/useSentenceBuilder'
 import SentenceBuilder from '@/components/SentenceBuilder'
 import UserHeader from '@/components/UserHeader'
 
 export default function CategoryDetailView({
-  pictogramas,
-  carregando,
+  cartoes,
+  loading,
   erro,
   handleVoltar,
 }: ReturnType<typeof useCategoryDetail>) {
@@ -42,15 +42,14 @@ export default function CategoryDetailView({
         emoji="👧"
       />
 
-      {/* CONSTRUTOR */}
       <SentenceBuilder />
 
-      {/* GRID */}
-      <ScrollView contentContainerStyle={styles.grid}>
-        
-        {/* 🔥 BOTÃO VOLTAR (PADRÃO IGUAL SUBCATEGORY) */}
+      <ScrollView
+        contentContainerStyle={styles.grid}
+        showsVerticalScrollIndicator={false}
+      >
         <TouchableOpacity
-          style={[styles.card, { backgroundColor: '#90A4AE' }]}
+          style={[styles.card, styles.backCard]}
           onPress={handleVoltar}
           activeOpacity={0.85}
         >
@@ -58,26 +57,46 @@ export default function CategoryDetailView({
           <Text style={styles.categoriaNome}>Voltar</Text>
         </TouchableOpacity>
 
-        {/* ESTADOS */}
-        {carregando && <Text>Carregando...</Text>}
-        {erro && <Text>{erro}</Text>}
+        {loading && (
+          <View style={styles.stateBox}>
+            <ActivityIndicator size="large" color="#5BC8E8" />
+            <Text style={styles.stateText}>Carregando...</Text>
+          </View>
+        )}
 
-        {/* PICTOGRAMAS */}
-        {pictogramas.map((p, index) => (
-          <TouchableOpacity
-            key={`${p.id}-${index}`}
-            style={styles.card}
-            onPress={() => {
-              falar(p.nome, () => {
-                adicionar(p)
-              })
-            }}
-            activeOpacity={0.85}
-          >
-            <Image source={{ uri: p.imagemUrl }} style={styles.image} />
-            <Text style={styles.nome}>{p.nome}</Text>
-          </TouchableOpacity>
-        ))}
+        {!loading && !!erro && (
+          <View style={styles.stateBox}>
+            <Text style={styles.errorText}>{erro}</Text>
+          </View>
+        )}
+
+        {!loading && !erro && cartoes.length === 0 && (
+          <View style={styles.stateBox}>
+            <Text style={styles.stateText}>Nenhum cartão encontrado.</Text>
+          </View>
+        )}
+
+        {!loading &&
+          !erro &&
+          cartoes.map((cartao, index) => (
+            <TouchableOpacity
+              key={`${cartao.id}-${index}`}
+              style={styles.card}
+              onPress={() => {
+                falar(cartao.nome, () => {
+                  adicionar({
+                    id: cartao.id,
+                    nome: cartao.nome,
+                    imagemUrl: cartao.imagem,
+                  })
+                })
+              }}
+              activeOpacity={0.85}
+            >
+              <Image source={{ uri: cartao.imagem }} style={styles.image} />
+              <Text style={styles.nome}>{cartao.nome}</Text>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
     </View>
   )
@@ -89,63 +108,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F9FF',
   },
 
-  header: {
-    backgroundColor: '#5BC8E8',
-    paddingTop: hp('5%'),
-    paddingBottom: hp('2.5%'),
-    paddingHorizontal: wp('5%'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomLeftRadius: wp('6%'),
-    borderBottomRightRadius: wp('6%'),
-  },
-
-  headerInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp('3%'),
-  },
-
-  avatarPlaceholder: {
-    width: wp('14%'),
-    height: wp('14%'),
-    borderRadius: wp('7%'),
-    backgroundColor: 'rgba(255,255,255,0.35)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  avatarEmoji: {
-    fontSize: wp('7%'),
-  },
-
-  headerBemVindo: {
-    fontSize: wp('3.5%'),
-    color: '#fff',
-  },
-
-  headerNome: {
-    fontSize: wp('5.5%'),
-    fontWeight: '800',
-    color: '#fff',
-  },
-
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: wp('4%'),
     gap: wp('3%'),
     justifyContent: 'center',
+    paddingBottom: hp('4%'),
   },
 
   card: {
     width: wp('42%'),
     height: wp('42%'),
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderRadius: wp('5%'),
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+  },
+
+  backCard: {
+    backgroundColor: '#90A4AE',
   },
 
   image: {
@@ -155,7 +142,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 
-  // 🔥 IGUAL AO SUBCATEGORY
   categoriaEmoji: {
     fontSize: wp('12%'),
     marginBottom: hp('1%'),
@@ -164,14 +150,36 @@ const styles = StyleSheet.create({
   categoriaNome: {
     fontSize: wp('4%'),
     fontWeight: '700',
-    color: '#fff',
+    color: '#FFFFFF',
     textAlign: 'center',
   },
 
-  // usado nos pictogramas
   nome: {
     fontSize: wp('4%'),
     fontWeight: '700',
     textAlign: 'center',
+    color: '#2e5486',
+    paddingHorizontal: wp('2%'),
+  },
+
+  stateBox: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: hp('3%'),
+  },
+
+  stateText: {
+    marginTop: hp('1%'),
+    fontSize: wp('4%'),
+    color: '#4F6F7A',
+    textAlign: 'center',
+  },
+
+  errorText: {
+    fontSize: wp('4%'),
+    color: '#D9534F',
+    textAlign: 'center',
+    fontWeight: '600',
   },
 })
