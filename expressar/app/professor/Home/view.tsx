@@ -57,10 +57,15 @@ export default function HomeScreenView({
           activeOpacity={0.85}
         >
           <View style={styles.iconBox}>
-            <Image source={icons.blackboard}></Image>
+            <Image
+              source={icons.blackboard}
+              style={styles.iconImage}
+            />
           </View>
 
-          <Text style={[styles.cardText, styles.greenText]}>Turmas</Text>
+          <Text style={[styles.cardText, styles.greenText]}>
+            Turmas
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -69,7 +74,10 @@ export default function HomeScreenView({
           activeOpacity={0.85}
         >
           <View style={styles.iconBox}>
-            <Image source={icons.createCard}></Image>
+            <Image
+              source={icons.createCard}
+              style={styles.iconImage}
+            />
           </View>
 
           <Text style={[styles.cardText, styles.yellowText]}>
@@ -83,10 +91,15 @@ export default function HomeScreenView({
           activeOpacity={0.85}
         >
           <View style={styles.iconBox}>
-            <Image source={icons.report}></Image>
+            <Image
+              source={icons.report}
+              style={styles.iconImage}
+            />
           </View>
 
-          <Text style={[styles.cardText, styles.blueText]}>Relatório</Text>
+          <Text style={[styles.cardText, styles.blueText]}>
+            Relatório
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -104,69 +117,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#EDEAE6',
-  },
-
-  header: {
-    backgroundColor: '#F4B544',
-    paddingTop: hp('5.5%'),
-    paddingBottom: hp('2%'),
-    paddingHorizontal: wp('4%'),
-    borderBottomLeftRadius: wp('6%'),
-    borderBottomRightRadius: wp('6%'),
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-
-  avatar: {
-    width: wp('13.5%'),
-    height: wp('13.5%'),
-    borderRadius: wp('6.75%'),
-    backgroundColor: '#F7F3E8',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: wp('3%'),
-  },
-
-  avatarEmoji: {
-    fontSize: wp('7%'),
-  },
-
-  headerTextBox: {
-    justifyContent: 'center',
-  },
-
-  welcome: {
-    color: '#FFF7E2',
-    fontSize: wp('3.2%'),
-    fontWeight: '600',
-  },
-
-  name: {
-    color: '#FFFFFF',
-    fontSize: wp('6%'),
-    fontWeight: '800',
-    marginTop: hp('0.2%'),
-  },
-
-  logoutBtn: {
-    backgroundColor: '#F7D68C',
-    paddingHorizontal: wp('4.5%'),
-    paddingVertical: hp('1%'),
-    borderRadius: wp('3.5%'),
-    marginLeft: wp('2%'),
-  },
-
-  logoutText: {
-    color: '#FFFFFF',
-    fontWeight: '700',
-    fontSize: wp('3.6%'),
   },
 
   menu: {
@@ -189,8 +139,8 @@ const styles = StyleSheet.create({
   },
 
   iconBox: {
-    width: wp('12%'),
-    height: wp('12%'),
+    width: wp('14%'),
+    height: wp('14%'),
     borderRadius: wp('3.5%'),
     backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
@@ -198,8 +148,10 @@ const styles = StyleSheet.create({
     marginRight: wp('3%'),
   },
 
-  cardIcon: {
-    fontSize: wp('7.5%'),
+  iconImage: {
+    width: wp('10%'),
+    height: wp('10%'),
+    resizeMode: 'contain',
   },
 
   cardText: {

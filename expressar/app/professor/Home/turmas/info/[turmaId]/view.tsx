@@ -13,6 +13,7 @@ import {
 } from "react-native-responsive-screen"
 import useInfoModel from "./model"
 import AppHeader from "@/components/AppHeader"
+import { avatar } from "@/assets/images"
 
 export default function InfoView({
   turmaNome,
@@ -22,13 +23,22 @@ export default function InfoView({
   goGerenciarAluno,
   voltar,
 }: ReturnType<typeof useInfoModel>) {
+
   function renderAlunoAvatar(sexo?: string) {
     const masculino =
-      sexo?.toLowerCase().includes("masc") || sexo?.toLowerCase() === "menino"
+      sexo?.toLowerCase().includes("masc") ||
+      sexo?.toLowerCase() === "menino"
+
+    const avatarImage = masculino
+      ? avatar.aluno
+      : avatar.aluna
 
     return (
       <View style={styles.avatarCircle}>
-        <Text style={styles.avatarEmoji}>{masculino ? "👦" : "👧"}</Text>
+        <Image
+          source={avatarImage}
+          style={styles.avatar}
+        />
       </View>
     )
   }
@@ -50,7 +60,9 @@ export default function InfoView({
         </Text>
 
         {alunos.length === 0 ? (
-          <Text style={styles.emptyText}>Nenhum aluno cadastrado ainda.</Text>
+          <Text style={styles.emptyText}>
+            Nenhum aluno cadastrado ainda.
+          </Text>
         ) : (
           <FlatList
             data={alunos}
@@ -65,7 +77,10 @@ export default function InfoView({
                   {renderAlunoAvatar(item.sexo)}
 
                   <View style={styles.cardInfo}>
-                    <Text style={styles.cardTitle}>{item.nome}</Text>
+                    <Text style={styles.cardTitle}>
+                      {item.nome}
+                    </Text>
+
                     <Text style={styles.cardSubtitle}>
                       {item.idade} anos · {item.sexo}
                     </Text>
@@ -76,14 +91,22 @@ export default function InfoView({
               </TouchableOpacity>
             )}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: hp("10%") }}
+            contentContainerStyle={{
+              paddingBottom: hp("10%"),
+            }}
           />
         )}
       </View>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.addButton} onPress={goAdicionarAluno} activeOpacity={0.85}>
-          <Text style={styles.addText}>Adicionar aluno</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={goAdicionarAluno}
+          activeOpacity={0.85}
+        >
+          <Text style={styles.addText}>
+            Adicionar aluno
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -138,17 +161,15 @@ const styles = StyleSheet.create({
   },
 
   avatarCircle: {
-    width: wp("14%"),
-    height: wp("14%"),
-    borderRadius: wp("7%"),
-    backgroundColor: "#E9EEF7",
     alignItems: "center",
     justifyContent: "center",
     marginRight: wp("3%"),
   },
 
-  avatarEmoji: {
-    fontSize: wp("8%"),
+  avatar: {
+    width: wp("14%"),
+    height: wp("14%"),
+    resizeMode: "contain",
   },
 
   cardInfo: {

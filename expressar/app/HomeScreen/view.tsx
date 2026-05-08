@@ -4,66 +4,106 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
+  Image,
 } from 'react-native'
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen'
+
 import useLoginModel from './model'
+
+import {
+  logos,
+  backgroundElements,
+  avatar,
+} from '@/assets/images'
 
 export default function HomeScreenView({
   goToAluno,
   goToProfessor,
-
 }: ReturnType<typeof useLoginModel>) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF8E7" />
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#DDE7EC"
+      />
 
-      {/* Fundo decorativo — bolinhas coloridas */}
-      <View style={[styles.bubble, styles.bubble1]} />
-      <View style={[styles.bubble, styles.bubble2]} />
-      <View style={[styles.bubble, styles.bubble3]} />
-      <View style={[styles.bubble, styles.bubble4]} />
+      {/* DECORAÇÕES */}
 
-      {/* Logo e slogan */}
+      <Image
+        source={backgroundElements.borboleta}
+        style={styles.borboleta}
+      />
+
+      <Image
+        source={backgroundElements.arco}
+        style={styles.arco}
+      />
+
+      <Image
+        source={backgroundElements.pecas}
+        style={styles.pecasLeft}
+      />
+
+      <Image
+        source={backgroundElements.pecas}
+        style={styles.pecasBottom}
+      />
+
+      <Image
+        source={backgroundElements.grama}
+        style={styles.grama}
+      />
+
+      {/* LOGO */}
+
       <View style={styles.logoArea}>
-        {/* Substitua pela imagem real: require('@/assets/images/logo.png') */}
-        <View style={styles.logoPlaceholder}>
-          <Text style={styles.logoPlaceholderText}>✋</Text>
-        </View>
-        <Text style={styles.appName}>Expressar</Text>
-        <Text style={styles.slogan}>Falando sem palavras</Text>
+        <Image
+          source={logos.expressar}
+          style={styles.logo}
+        />
       </View>
 
-      {/* Botões */}
+      {/* BOTÕES */}
+
       <View style={styles.buttonsArea}>
 
-        {/* Botão Aluno */}
         <TouchableOpacity
           style={[styles.button, styles.buttonAluno]}
           onPress={goToAluno}
           activeOpacity={0.85}
         >
-          {/* Substitua pela imagem real: require('@/assets/images/aluno-icon.png') */}
           <View style={styles.buttonIcon}>
-            <Text style={styles.buttonIconText}>👧</Text>
+            <Image
+              source={avatar.aluna}
+              style={styles.avatar}
+            />
           </View>
-          <Text style={styles.buttonText}>Aluno</Text>
+
+          <Text style={styles.buttonText}>
+            Aluno
+          </Text>
         </TouchableOpacity>
 
-        {/* Botão Professor */}
         <TouchableOpacity
           style={[styles.button, styles.buttonProfessor]}
           onPress={goToProfessor}
           activeOpacity={0.85}
         >
-          {/* Substitua pela imagem real: require('@/assets/images/professor-icon.png') */}
           <View style={styles.buttonIcon}>
-            <Text style={styles.buttonIconText}>👨‍🏫</Text>
+            <Image
+              source={avatar.aluno}
+              style={styles.avatar}
+            />
           </View>
-          <Text style={styles.buttonText}>Professor</Text>
+
+          <Text style={styles.buttonText}>
+            Professor
+          </Text>
         </TouchableOpacity>
 
       </View>
@@ -74,122 +114,111 @@ export default function HomeScreenView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF8E7',
+    backgroundColor: '#DDE7EC',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: wp('8%'),
   },
 
-  // --- Decoração de fundo ---
-  bubble: {
-    position: 'absolute',
-    borderRadius: 999,
-    opacity: 0.25,
-  },
-  bubble1: {
-    width: wp('45%'),
-    height: wp('45%'),
-    backgroundColor: '#F5A623',
-    top: -hp('3%'),
-    left: -wp('10%'),
-  },
-  bubble2: {
-    width: wp('30%'),
-    height: wp('30%'),
-    backgroundColor: '#5BC8E8',
-    top: hp('8%'),
-    right: -wp('5%'),
-  },
-  bubble3: {
-    width: wp('25%'),
-    height: wp('25%'),
-    backgroundColor: '#7ED957',
-    bottom: hp('14%'),
-    left: -wp('3%'),
-  },
-  bubble4: {
-    width: wp('38%'),
-    height: wp('38%'),
-    backgroundColor: '#F5A623',
-    bottom: -hp('3%'),
-    right: -wp('8%'),
-  },
-
-  // --- Logo ---
   logoArea: {
     alignItems: 'center',
     marginBottom: hp('7%'),
-  },
-  logoPlaceholder: {
-    width: wp('28%'),
-    height: wp('28%'),
-    borderRadius: wp('6%'),
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: hp('2%'),
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  logoPlaceholderText: {
-    fontSize: wp('13%'),
-  },
-  appName: {
-    fontSize: wp('10%'),
-    fontWeight: '800',
-    color: '#2D2D2D',
-    letterSpacing: 0.5,
-  },
-  slogan: {
-    fontSize: wp('4%'),
-    color: '#888888',
-    marginTop: hp('0.5%'),
-    fontStyle: 'italic',
-    letterSpacing: 0.3,
+    zIndex: 2,
   },
 
-  // --- Botões ---
+  logo: {
+    width: wp('52%'),
+    height: wp('52%'),
+    resizeMode: 'contain',
+  },
+
   buttonsArea: {
     width: '100%',
-    gap: hp('2%'),
+    gap: hp('2.5%'),
+    zIndex: 2,
   },
+
   button: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: hp('2.2%'),
-    paddingHorizontal: wp('7%'),
+    paddingHorizontal: wp('6%'),
     borderRadius: wp('5%'),
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    elevation: 5,
   },
+
   buttonAluno: {
-    backgroundColor: '#5BC8E8',
+    backgroundColor: '#63B7E6',
   },
+
   buttonProfessor: {
-    backgroundColor: '#F5A623',
+    backgroundColor: '#F4B63D',
   },
+
   buttonIcon: {
-    width: wp('13%'),
-    height: wp('13%'),
-    borderRadius: wp('3.5%'),
+    width: wp('15%'),
+    height: wp('15%'),
+    borderRadius: wp('7.5%'),
     backgroundColor: 'rgba(255,255,255,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: wp('4%'),
   },
-  buttonIconText: {
-    fontSize: wp('7%'),
+
+  avatar: {
+    width: wp('12%'),
+    height: wp('12%'),
+    resizeMode: 'contain',
   },
+
   buttonText: {
     fontSize: wp('6%'),
     fontWeight: '700',
     color: '#FFFFFF',
-    letterSpacing: 0.3,
+  },
+
+  borboleta: {
+    position: 'absolute',
+    top: hp('12%'),
+    left: wp('-2%'),
+    width: wp('18%'),
+    height: wp('18%'),
+    resizeMode: 'contain',
+  },
+
+  arco: {
+    position: 'absolute',
+    top: hp('24%'),
+    right: wp('-2%'),
+    width: wp('18%'),
+    height: wp('18%'),
+    resizeMode: 'contain',
+  },
+
+  pecasLeft: {
+    position: 'absolute',
+    left: wp('-5%'),
+    bottom: hp('12%'),
+    width: wp('28%'),
+    height: wp('28%'),
+    resizeMode: 'contain',
+  },
+
+  pecasBottom: {
+    position: 'absolute',
+    left: wp('8%'),
+    bottom: hp('5%'),
+    width: wp('22%'),
+    height: wp('22%'),
+    resizeMode: 'contain',
+    transform: [{ rotate: '18deg' }],
+  },
+
+  grama: {
+    position: 'absolute',
+    right: wp('-3%'),
+    bottom: hp('-1%'),
+    width: wp('42%'),
+    height: wp('42%'),
+    resizeMode: 'contain',
   },
 })

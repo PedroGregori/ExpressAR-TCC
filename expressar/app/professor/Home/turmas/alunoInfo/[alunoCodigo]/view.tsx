@@ -14,7 +14,7 @@ import {
 } from "react-native-responsive-screen"
 import useAlunoModel from "./model"
 import AppHeader from "@/components/AppHeader"
-import { logos, icons } from "@/assets/images"
+import { icons, avatar } from "@/assets/images"
 
 export default function AlunoView({
   aluno,
@@ -31,11 +31,19 @@ export default function AlunoView({
 
   function renderAlunoAvatar(sexo?: string) {
     const masculino =
-      sexo?.toLowerCase().includes("masc") || sexo?.toLowerCase() === "menino"
+      sexo?.toLowerCase().includes("masc") ||
+      sexo?.toLowerCase() === "menino"
+
+    const avatarImage = masculino
+      ? avatar.aluno
+      : avatar.aluna
 
     return (
       <View style={styles.avatarCircle}>
-        <Text style={styles.avatarEmoji}>{masculino ? "👦" : "👧"}</Text>
+        <Image
+          source={avatarImage}
+          style={styles.avatar}
+        />
       </View>
     )
   }
@@ -72,7 +80,9 @@ export default function AlunoView({
 
           {renderAlunoAvatar(aluno.sexo)}
 
-          <Text style={styles.cardTitle}>{aluno.nome}</Text>
+          <Text style={styles.cardTitle}>
+            {aluno.nome}
+          </Text>
 
           <Text style={styles.cardSubtitle}>
             {aluno.idade} anos · {aluno.sexo}
@@ -82,46 +92,60 @@ export default function AlunoView({
             Código: {aluno.codigo}
           </Text>
 
-          {/* BOTÃO RELATÓRIO */}
           <TouchableOpacity
             style={[styles.button, styles.blue]}
             onPress={verRelatorio}
             activeOpacity={0.85}
           >
             <View style={styles.buttonContent}>
-              <Image source={icons.manageReport} style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Ver relatório</Text>
+              <Image
+                source={icons.manageReport}
+                style={styles.buttonIcon}
+              />
+
+              <Text style={styles.buttonText}>
+                Ver relatório
+              </Text>
             </View>
           </TouchableOpacity>
 
-          {/* BOTÃO EDITAR */}
           <TouchableOpacity
             style={[styles.button, styles.yellow]}
             onPress={editarAluno}
             activeOpacity={0.85}
           >
             <View style={styles.buttonContent}>
-              <Image source={icons.edit} style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Editar aluno</Text>
+              <Image
+                source={icons.edit}
+                style={styles.buttonIcon}
+              />
+
+              <Text style={styles.buttonText}>
+                Editar aluno
+              </Text>
             </View>
           </TouchableOpacity>
 
-          {/* BOTÃO REMOVER */}
           <TouchableOpacity
             style={[styles.button, styles.red]}
             onPress={abrirPopupRemover}
             activeOpacity={0.85}
           >
             <View style={styles.buttonContent}>
-              <Image source={icons.trash} style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Remover aluno</Text>
+              <Image
+                source={icons.trash}
+                style={styles.buttonIcon}
+              />
+
+              <Text style={styles.buttonText}>
+                Remover aluno
+              </Text>
             </View>
           </TouchableOpacity>
 
         </View>
       </View>
 
-      {/* POPUP */}
       <Modal visible={popupRemover} transparent animationType="fade">
         <View style={styles.popupOverlay}>
           <View style={styles.popup}>
@@ -130,11 +154,16 @@ export default function AlunoView({
               <Text style={styles.popupCheck}>!</Text>
             </View>
 
-            <Text style={styles.popupTitle}>Remover aluno?</Text>
+            <Text style={styles.popupTitle}>
+              Remover aluno?
+            </Text>
 
             <Text style={styles.popupName}>
               Tem certeza que deseja remover{" "}
-              <Text style={styles.popupNameBold}>{aluno.nome}</Text>?
+              <Text style={styles.popupNameBold}>
+                {aluno.nome}
+              </Text>
+              ?
             </Text>
 
             <TouchableOpacity
@@ -152,7 +181,9 @@ export default function AlunoView({
               onPress={fecharPopupRemover}
               disabled={removendo}
             >
-              <Text style={styles.popupSecondaryText}>Cancelar</Text>
+              <Text style={styles.popupSecondaryText}>
+                Cancelar
+              </Text>
             </TouchableOpacity>
 
           </View>
@@ -197,20 +228,16 @@ const styles = StyleSheet.create({
   },
 
   avatarCircle: {
-    width: wp("28%"),
-    height: wp("28%"),
-    borderRadius: wp("14%"),
-    backgroundColor: "#E9EEF7",
     alignItems: "center",
     justifyContent: "center",
     marginTop: hp("2%"),
     marginBottom: hp("2%"),
-    borderWidth: 1.5,
-    borderColor: "#A7C7E7",
   },
 
-  avatarEmoji: {
-    fontSize: wp("14%"),
+  avatar: {
+    width: wp("28%"),
+    height: wp("28%"),
+    resizeMode: "contain",
   },
 
   cardTitle: {
@@ -242,14 +269,12 @@ const styles = StyleSheet.create({
     marginBottom: hp("2.5%"),
   },
 
-  // 👇 ÍCONE + TEXTO
   buttonContent: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  // 👇 ÍCONE
   buttonIcon: {
     width: wp("5%"),
     height: wp("5%"),
@@ -257,7 +282,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
 
-  // 👇 TEXTO
   buttonText: {
     color: "#fff",
     fontWeight: "700",

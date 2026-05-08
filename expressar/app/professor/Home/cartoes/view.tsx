@@ -45,11 +45,15 @@ export default function SelecionarTurmaView({
               activeOpacity={0.8}
             >
               <View style={styles.iconBox}>
-                <Image source={icons.blackboard}></Image>
+                <Image
+                  source={icons.blackboard}
+                  style={styles.icon}
+                />
               </View>
 
               <View style={styles.info}>
                 <Text style={styles.nome}>{turma.nome}</Text>
+
                 <Text style={styles.desc}>
                   {turma.alunos} Alunos • {turma.turno}
                 </Text>
@@ -95,7 +99,9 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    fontSize: wp("10%"),
+    width: wp("10%"),
+    height: wp("10%"),
+    resizeMode: "contain",
   },
 
   info: {

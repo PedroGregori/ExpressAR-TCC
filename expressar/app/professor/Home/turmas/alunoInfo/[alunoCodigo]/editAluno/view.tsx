@@ -7,6 +7,7 @@ import {
   StatusBar,
   Modal,
   ActivityIndicator,
+  Image,
 } from "react-native"
 import DropDownPicker from "react-native-dropdown-picker"
 import { useState } from "react"
@@ -16,6 +17,7 @@ import {
 } from "react-native-responsive-screen"
 import AppHeader from "@/components/AppHeader"
 import useEditAlunoModel from "./model"
+import { avatar } from "@/assets/images"
 
 export default function EditAlunoView({
   nome,
@@ -35,10 +37,14 @@ export default function EditAlunoView({
 }: ReturnType<typeof useEditAlunoModel>) {
   const [open, setOpen] = useState(false)
 
-  const avatarEmoji =
-    sexo === "Masculino" ? "👦" : sexo === "Feminino" ? "👧" : "🙂"
+  const avatarImage =
+    sexo === "Masculino"
+      ? avatar.aluno
+      : sexo === "Feminino"
+      ? avatar.aluna
+      : avatar.aluno
 
-    if (loading) {
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#6CC24A" />
@@ -69,17 +75,23 @@ export default function EditAlunoView({
         <View style={[styles.formCard, open && { zIndex: 1000 }]}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatarCircle}>
-              <Text style={styles.avatar}>{avatarEmoji}</Text>
+              <Image
+                source={avatarImage}
+                style={styles.avatar}
+              />
             </View>
 
             <View style={styles.checkBadge}>
               <Text style={styles.checkText}>✓</Text>
             </View>
 
-            <Text style={styles.avatarText}>Selecione o avatar</Text>
+            <Text style={styles.avatarText}>
+              Selecione o avatar
+            </Text>
           </View>
 
           <Text style={styles.label}>Nome completo</Text>
+
           <TextInput
             style={styles.input}
             placeholder="Digite o nome do aluno"
@@ -89,6 +101,7 @@ export default function EditAlunoView({
           />
 
           <Text style={styles.label}>Idade</Text>
+
           <TextInput
             style={styles.input}
             placeholder="Digite a idade"
@@ -99,6 +112,7 @@ export default function EditAlunoView({
           />
 
           <Text style={styles.label}>Gênero</Text>
+
           <DropDownPicker
             open={open}
             value={sexo}
@@ -118,11 +132,16 @@ export default function EditAlunoView({
           />
 
           <Text style={styles.label}>Código do aluno</Text>
+
           <View style={styles.codigoBox}>
-            <Text style={styles.codigoText}>{alunoCodigo}</Text>
+            <Text style={styles.codigoText}>
+              {alunoCodigo}
+            </Text>
           </View>
 
-          {erro ? <Text style={styles.errorText}>{erro}</Text> : null}
+          {erro ? (
+            <Text style={styles.errorText}>{erro}</Text>
+          ) : null}
 
           <View style={styles.buttons}>
             <TouchableOpacity
@@ -130,7 +149,9 @@ export default function EditAlunoView({
               onPress={voltar}
               activeOpacity={0.85}
             >
-              <Text style={styles.buttonText}>Cancelar</Text>
+              <Text style={styles.buttonText}>
+                Cancelar
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -153,12 +174,19 @@ export default function EditAlunoView({
               <Text style={styles.popupCheck}>✓</Text>
             </View>
 
-            <Text style={styles.popupTitle}>Aluno atualizado!</Text>
+            <Text style={styles.popupTitle}>
+              Aluno atualizado!
+            </Text>
 
             {popup && (
               <>
-                <Text style={styles.popupCode}>Código: {popup.alunoCodigo}</Text>
-                <Text style={styles.popupName}>{popup.nome}</Text>
+                <Text style={styles.popupCode}>
+                  Código: {popup.alunoCodigo}
+                </Text>
+
+                <Text style={styles.popupName}>
+                  {popup.nome}
+                </Text>
               </>
             )}
 
@@ -167,7 +195,9 @@ export default function EditAlunoView({
               onPress={verAluno}
               activeOpacity={0.85}
             >
-              <Text style={styles.popupPrimaryText}>Ver aluno</Text>
+              <Text style={styles.popupPrimaryText}>
+                Ver aluno
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -215,18 +245,14 @@ const styles = StyleSheet.create({
   },
 
   avatarCircle: {
-    width: wp("28%"),
-    height: wp("28%"),
-    borderRadius: wp("14%"),
-    backgroundColor: "#EAF3FB",
-    borderWidth: 1.5,
-    borderColor: "#A8CAE7",
     alignItems: "center",
     justifyContent: "center",
   },
 
   avatar: {
-    fontSize: wp("14%"),
+    width: wp("28%"),
+    height: wp("28%"),
+    resizeMode: "contain",
   },
 
   checkBadge: {

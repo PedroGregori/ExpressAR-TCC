@@ -36,10 +36,14 @@ export default function TurmasView({
         activeOpacity={0.85}
       >
         <View style={styles.cardLeft}>
-          <Image source={icons.blackboard} style={styles.icon}></Image>
+          <Image
+            source={icons.blackboard}
+            style={styles.icon}
+          />
 
           <View style={styles.cardInfo}>
             <Text style={styles.cardTitle}>{item.nome}</Text>
+
             <Text style={styles.cardSubtitle}>
               {item.qtd_alunos} alunos · {item.turno}
             </Text>
@@ -74,9 +78,10 @@ export default function TurmasView({
         backgroundColor="#6BBA49"
       />
 
-      {/* CONTEÚDO */}
       <View style={styles.content}>
-        <Text style={styles.subtitle}>Gerencie suas turmas cadastradas</Text>
+        <Text style={styles.subtitle}>
+          Gerencie suas turmas cadastradas
+        </Text>
 
         <View
           style={styles.listContainer}
@@ -89,15 +94,24 @@ export default function TurmasView({
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => renderTurmaCard(item)}
             showsVerticalScrollIndicator={false}
-            onContentSizeChange={(_, height) => setContentHeight(height)}
+            onContentSizeChange={(_, height) =>
+              setContentHeight(height)
+            }
             contentContainerStyle={[
               styles.listContent,
-              showFixedButton && { paddingBottom: hp("12%") },
+              showFixedButton && {
+                paddingBottom: hp("12%"),
+              },
             ]}
-            ListFooterComponent={!showFixedButton ? <FooterButton /> : null}
+            ListFooterComponent={
+              !showFixedButton ? <FooterButton /> : null
+            }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>Nenhuma turma cadastrada.</Text>
+                <Text style={styles.emptyText}>
+                  Nenhuma turma cadastrada.
+                </Text>
+
                 {!showFixedButton && <FooterButton />}
               </View>
             }
@@ -105,7 +119,6 @@ export default function TurmasView({
         </View>
       </View>
 
-      {/* BOTÃO FIXO */}
       {showFixedButton && (
         <View style={styles.fixedFooter}>
           <FooterButton />
@@ -150,11 +163,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 5,
-    elevation: 3,
   },
 
   cardLeft: {
@@ -163,10 +171,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  cardImage: {
-    width: wp("15%"),
-    height: wp("15%"),
-    marginRight: wp("3%"),
+  icon: {
+    width: wp("10%"),
+    height: wp("10%"),
+    resizeMode: "contain",
+    marginRight: hp("1.5%"),
   },
 
   cardInfo: {
@@ -224,9 +233,5 @@ const styles = StyleSheet.create({
     color: "#777",
     fontSize: wp("4%"),
     marginBottom: hp("2%"),
-  },
-
-  icon: {
-    marginRight: hp("1.5%")
   },
 })
