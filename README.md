@@ -29,7 +29,7 @@ It is expected that ExpressAr will result in a functional prototype and generate
 
 [https://trello.com/b/tPHJjMcu/kanban-expressar](https://trello.com/b/uPmnTLdx/trello-expressar)
 
-**IMAGENS DO PROTÓTIPO:**
+**DEMONSTRAÇÃO DO PROTÓTIPO:**
 
 https://github.com/user-attachments/assets/22e077af-c5bf-4a90-8889-0a9c7287c9a9
 
