@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useRouter, useLocalSearchParams } from "expo-router"
+
 import { buscarPictogramas } from "@/services/arasaac/arasaacService"
 import { useCardImageStore } from "@/store/useCardImageStore"
 
@@ -11,6 +12,7 @@ type Destino = "cartao" | "categoria" | "subcategoria"
 
 export default function usePesquisarImagemModel() {
   const router = useRouter()
+
   const setImagemSelecionada = useCardImageStore(
     (state) => state.setImagemSelecionada
   )
@@ -23,6 +25,8 @@ export default function usePesquisarImagemModel() {
     categoriaId,
     subcategoriaId,
     nome,
+    nomeCategoria,
+    nomeSubcategoria,
   } = useLocalSearchParams<{
     turmaId: string
     professor?: string
@@ -31,6 +35,8 @@ export default function usePesquisarImagemModel() {
     categoriaId?: string
     subcategoriaId?: string
     nome?: string
+    nomeCategoria?: string
+    nomeSubcategoria?: string
   }>()
 
   const [busca, setBusca] = useState("")
@@ -42,7 +48,9 @@ export default function usePesquisarImagemModel() {
 
     try {
       setLoading(true)
+
       const data = await buscarPictogramas(busca)
+
       setResultados(data)
     } catch (e) {
       console.log("Erro ao buscar pictogramas:", e)
@@ -54,15 +62,21 @@ export default function usePesquisarImagemModel() {
   function selecionarImagem(id: number) {
     const url = `https://static.arasaac.org/pictograms/${id}/${id}_500.png`
 
+    // CARTÃO
+    // qualquer cartão usa store e volta
     if (destino === "cartao") {
       setImagemSelecionada(url)
+
       router.back()
+
       return
     }
 
+    // CATEGORIA
     if (destino === "categoria") {
       router.replace({
-        pathname: "/professor/Home/cartoes/manageCategory/createCategory/[turmaId]",
+        pathname:
+          "/professor/Home/cartoes/manageCategory/createCategory/[turmaId]",
         params: {
           turmaId,
           nomeTurma,
@@ -70,12 +84,25 @@ export default function usePesquisarImagemModel() {
           imagem: url,
         },
       })
+
       return
     }
 
+    // SUBCATEGORIA
     if (destino === "subcategoria") {
-      setImagemSelecionada(url)
-      router.back()
+      router.replace({
+        pathname:
+          "/professor/Home/cartoes/manageCategory/categoryInfo/[categoriaId]/createSubCategory",
+        params: {
+          turmaId,
+          categoriaId,
+          nomeCategoria,
+          nomeSubcategoria,
+          subcategoriaId,
+          imagem: url,
+        },
+      })
+
       return
     }
   }

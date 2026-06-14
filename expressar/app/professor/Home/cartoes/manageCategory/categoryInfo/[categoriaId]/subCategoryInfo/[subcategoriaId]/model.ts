@@ -69,7 +69,7 @@ export default function useManageSubCategoryModel() {
         subcategoriaId,
         nomeCategoria,
         nomeSubcategoria,
-        destino: "subcategoria",
+        destino: "cartao",
       },
     })
   }

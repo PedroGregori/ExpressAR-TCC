@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { supabase } from '@/lib/supabase'
 
 type Cartao = {
   id: string
   nome: string
   imagem: string
+  turma_id: string
+  categoria_id: string
+  subcategoria_id: string | null
 }
 
 export default function useCategoryDetail() {
@@ -33,12 +37,13 @@ export default function useCategoryDetail() {
 
       let query = supabase
         .from('cartoes')
-        .select('id, nome, imagem')
+        .select('id, nome, imagem, turma_id, categoria_id, subcategoria_id')
         .eq('categoria_id', categoriaId)
 
-      // 👉 se tiver subcategoria, filtra também
       if (subcategoriaId) {
         query = query.eq('subcategoria_id', subcategoriaId)
+      } else {
+        query = query.is('subcategoria_id', null)
       }
 
       const { data, error } = await query
@@ -55,6 +60,28 @@ export default function useCategoryDetail() {
     }
   }
 
+  async function registrarInteracaoCartao(cartao: Cartao) {
+    try {
+      const alunoStorage = await AsyncStorage.getItem('aluno')
+
+      if (!alunoStorage) return
+
+      const aluno = JSON.parse(alunoStorage)
+
+      const { error } = await supabase.from('interacoes_cartoes').insert({
+        aluno_id: aluno.id,
+        turma_id: cartao.turma_id,
+        cartao_id: cartao.id,
+        categoria_id: cartao.categoria_id,
+        subcategoria_id: cartao.subcategoria_id ?? null,
+      })
+
+      if (error) throw error
+    } catch (e) {
+      console.log('Erro ao registrar interação do cartão:', e)
+    }
+  }
+
   function handleVoltar() {
     router.back()
   }
@@ -64,5 +91,6 @@ export default function useCategoryDetail() {
     loading,
     erro,
     handleVoltar,
+    registrarInteracaoCartao,
   }
 }

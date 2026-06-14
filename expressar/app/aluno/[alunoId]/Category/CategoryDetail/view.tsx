@@ -26,6 +26,7 @@ export default function CategoryDetailView({
   loading,
   erro,
   handleVoltar,
+  registrarInteracaoCartao,
 }: ReturnType<typeof useCategoryDetail>) {
   const { nomeAluno } = useUserLogged()
   const { falar } = useTextToSpeech()
@@ -82,7 +83,9 @@ export default function CategoryDetailView({
             <TouchableOpacity
               key={`${cartao.id}-${index}`}
               style={styles.card}
-              onPress={() => {
+              onPress={async () => {
+                await registrarInteracaoCartao(cartao)
+
                 falar(cartao.nome, () => {
                   adicionar({
                     id: cartao.id,
@@ -93,8 +96,14 @@ export default function CategoryDetailView({
               }}
               activeOpacity={0.85}
             >
-              <Image source={{ uri: cartao.imagem }} style={styles.image} />
-              <Text style={styles.nome}>{cartao.nome}</Text>
+              <Image
+                source={{ uri: cartao.imagem }}
+                style={styles.image}
+              />
+
+              <Text style={styles.nome}>
+                {cartao.nome}
+              </Text>
             </TouchableOpacity>
           ))}
       </ScrollView>
@@ -126,7 +135,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
     shadowOpacity: 0.12,
     shadowRadius: 8,
   },

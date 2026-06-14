@@ -51,7 +51,7 @@ export default function useHomeScreenModel() {
   }
 
   function goRelatorio() {
-    router.push('/relatorio')
+    router.push('professor/Home/relatorios')
   }
 
   return {

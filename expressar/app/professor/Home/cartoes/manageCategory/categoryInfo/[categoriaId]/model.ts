@@ -86,7 +86,7 @@ export default function useManageCategoryModel() {
 
   function irCriarSubcategoria() {
     router.push({
-      pathname: "/professor/Home/cartoes/createSubCategory",
+      pathname: "/professor/Home/cartoes/manageCategory/categoryInfo/[categoriaId]/createSubCategory",
       params: {
         categoriaId,
         turmaId,
